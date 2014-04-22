@@ -31,6 +31,7 @@ class Hashcash{
 		$this->setBits($bits);
 		$this->setDate(date(static::DATE_FORMAT));
 		$this->setResource($resource);
+		$this->setExpiration(static::EXPIRATION);
 	}
 	
 	public function setVersion($version){
@@ -57,6 +58,11 @@ class Hashcash{
 	}
 	
 	public function setDate($date){
+		$dateLen = strlen($date);
+		if($dateLen != 6 && $dateLen != 10 && $dateLen != 12){
+			throw new InvalidArgumentException('Date "'.$date.'" is not valid.', 1);
+		}
+		
 		$this->date = $date;
 	}
 	
@@ -105,7 +111,7 @@ class Hashcash{
 	}
 	
 	public function mint(){
-		fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
+		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamp = '';
 		
 		$rounds = pow(2, $this->getBits());
@@ -129,11 +135,11 @@ class Hashcash{
 			
 			#if($round % 2000 == 0)
 			#if($round % 50 == 0 || $ok || $bits >= 10)
-			if($round % 50 == 0 && $bits >= 10)
-			fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
+			#if($round % 50 == 0 && $bits >= 10)
+			#fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
 			
 			if($ok){
-				fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
+				#fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
 				
 				$stamp = $testStamp;
 				$this->setSuffix($round);
@@ -146,7 +152,7 @@ class Hashcash{
 	}
 	
 	public function verify($stamp){
-		fwrite(STDOUT, __METHOD__.' stamp: '.$stamp."\n");
+		#fwrite(STDOUT, __METHOD__.' stamp: "'.$stamp.'"'."\n");
 		
 		if(!$stamp){
 			throw new InvalidArgumentException('Stamp "'.$stamp.'" is not valid.', 1);
@@ -171,8 +177,42 @@ class Hashcash{
 		
 		$bits = $this->checkBits(hash('sha1', $stamp, true));
 		$verified = $bits >= $this->getBits();
+		if($verified && $this->getExpiration()){
+			$dateLen = strlen($this->getDate());
+			$year = '';
+			$month = '';
+			$day = '';
+			$hour = '00';
+			$minute = '00';
+			$second = '00';
+			
+			switch($dateLen){
+				case 12:
+					$second = substr($this->getDate(), 10, 2);
+				case 10:
+					$hour = substr($this->getDate(), 6, 2);
+					$minute = substr($this->getDate(), 8, 2);
+				case 6:
+					$year = substr($this->getDate(), 0, 2);
+					$month = substr($this->getDate(), 2, 2);
+					$day = substr($this->getDate(), 4, 2);
+			}
+			
+			#fwrite(STDOUT, __METHOD__.' date: '.$year.', '.$month.', '.$day.' - '.$hour.':'.$minute.':'.$second."\n");
+			
+			$date = new DateTime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+			$now = new DateTime('now');
+			
+			if($date->getTimestamp() < $now->getTimestamp() - $this->getExpiration()){
+				$verified = false;
+			}
+			
+			#fwrite(STDOUT, __METHOD__.' date: '.$date->getTimestamp()."\n");
+			#fwrite(STDOUT, __METHOD__.' now:  '.$now->getTimestamp()."\n");
+			#fwrite(STDOUT, __METHOD__.' exp:  '.($now->getTimestamp() - $this->getExpiration()).' '.(int)$verified."\n");
+		}
 		
-		fwrite(STDOUT, __METHOD__.' bits: '.$bits.' = '.$this->getBits().', '.(int)$verified."\n");
+		#fwrite(STDOUT, __METHOD__.' bits: '.$bits.' = '.$this->getBits().', '.(int)$verified."\n");
 		
 		return $verified;
 	}
