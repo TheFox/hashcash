@@ -1,0 +1,21 @@
+{
+	"name": "thefox/hashcash",
+	"require-dev": {
+		"phpunit/phpunit": "4.0.14"
+	},
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Christian Mayer",
+			"email": "thefox21at@gmail.com"
+		}
+	],
+	"require": {
+
+	},
+	"autoload": {
+		"psr-0": {
+			"TheFox": "src"
+		}
+	}
+}
