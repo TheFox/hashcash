@@ -16,7 +16,7 @@ use TheFox\Utilities\Rand;
 class Hashcash{
 	
 	const DATE_FORMAT = 'ymd';
-	const EXPIRATION = 2419200 // 28 days
+	const EXPIRATION = 2419200; // 28 days
 	
 	private $version = 1;
 	private $bits = 0;
