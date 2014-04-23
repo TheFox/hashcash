@@ -117,7 +117,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2:ext2:salt2:22060') );
 		$this->assertTrue(  $hashcash->verify('1:28:140422:::s15xXleWocBKSA95Zw4e1Q==:245861178') );
 		$this->assertFalse( $hashcash->verify('1:20:140422:mint3::ArrRIabEj3nZrOcM:0000000000007u1E') );
-		$this->assertTrue( $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358') );
+		$this->assertTrue(  $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358') );
 		
 		$hashcash->setExpiration(3600 * 24 * 365);
 		$this->assertFalse( $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358') );
