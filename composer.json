@@ -1,8 +1,14 @@
 {
 	"name": "thefox/hashcash",
-	"require-dev": {
-		"phpunit/phpunit": "4.0.14"
-	},
+	"description": "Hashcash implementation in PHP",
+	"type": "library",
+	"keywords": [
+		"Hashcash",
+		"Hash",
+		"Cash",
+		"sha1"
+	],
+	"homepage": "http://framework.zend.com/",
 	"license": "GPLv3",
 	"authors": [
 		{
@@ -13,6 +19,9 @@
 	],
 	"require": {
 
+	},
+	"require-dev": {
+		"phpunit/phpunit": "4.0.14"
 	},
 	"autoload": {
 		"psr-0": {
