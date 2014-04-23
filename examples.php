@@ -58,4 +58,26 @@ catch(Exception $e){
 	print "ERROR 5: ".$e->getMessage()."\n";
 }
 
+
+// Example 4
+$hashcash = new Hashcash(20, 'example@example.com');
+$hashcash->setDate('870221');
+$stamp = '';
+try{
+	$stamp = $hashcash->mint();
+	print "hashcash stamp4: '".$stamp."'\n";
+}
+catch(Exception $e){
+	print "ERROR 6: ".$e->getMessage()."\n";
+}
+
+$hashcash = new Hashcash();
+$hashcash->setExpiration(0); // Never expire.
+try{
+	print "hashcash stamp4 verify: '".( $hashcash->verify($stamp) ? 'Ok' : 'failed' )."'\n";
+}
+catch(Exception $e){
+	print "ERROR 7: ".$e->getMessage()."\n";
+}
+
 ?>
