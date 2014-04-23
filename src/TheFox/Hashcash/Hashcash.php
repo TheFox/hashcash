@@ -27,6 +27,7 @@ class Hashcash{
 	private $salt = '';
 	private $suffix = '';
 	private $expiration = 0;
+	private $attempts = 0;
 	
 	public function __construct($bits = 20, $resource = ''){
 		$this->setBits($bits);
@@ -111,6 +112,14 @@ class Hashcash{
 		return $this->expiration;
 	}
 	
+	public function setAttempts($attempts){
+		$this->attempts = $attempts;
+	}
+	
+	public function getAttempts(){
+		return $this->attempts;
+	}
+	
 	public function mint(){
 		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamp = '';
@@ -123,6 +132,7 @@ class Hashcash{
 		}
 		
 		$found = false;
+		$attempt = 0;
 		$round = 0;
 		$attemptSalts = array();
 		for($attempt = 0; $attempt < static::MINT_ATTEMPTS_MAX && !$found; $attempt++){
@@ -157,6 +167,7 @@ class Hashcash{
 			$stamp = $testStamp;
 			$this->setSuffix($round);
 			$this->setSalt($salt);
+			$this->setAttempts($attempt);
 		}
 		else{
 			throw new RuntimeException('Could not generate stamp after '.static::MINT_ATTEMPTS_MAX.' attempts, '
