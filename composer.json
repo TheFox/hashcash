@@ -7,7 +7,8 @@
 	"authors": [
 		{
 			"name": "Christian Mayer",
-			"email": "thefox21at@gmail.com"
+			"email": "thefox21at@gmail.com",
+			"homepage": "http://fox21.at"
 		}
 	],
 	"require": {
