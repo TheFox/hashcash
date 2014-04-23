@@ -17,6 +17,7 @@ class Hashcash{
 	
 	const DATE_FORMAT = 'ymd';
 	const EXPIRATION = 2419200; // 28 days
+	const MINT_ATTEMPTS_MAX = 3;
 	
 	private $version = 1;
 	private $bits = 0;
@@ -115,37 +116,51 @@ class Hashcash{
 		$stamp = '';
 		
 		$rounds = pow(2, $this->getBits());
+		$salt = $this->getSalt();
 		
-		if(!$this->getSalt()){
-			$this->setSalt(base64_encode(Rand::data(16)));
+		if(!$salt){
+			$salt = base64_encode(Rand::data(16));
 		}
 		
-		$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$this->getSalt().':';
-		
-		#fwrite(STDOUT, __METHOD__.' bits: '.$this->getBits()."\n");
-		#fwrite(STDOUT, __METHOD__.' rounds: '.$rounds."\n");
-		#fwrite(STDOUT, __METHOD__.' baseStamp: '.$baseStamp."\n");
-		
-		for($round = 0; $round < $rounds; $round++){
-			$testStamp = $baseStamp.$round;
-			#$testStamp = $baseStamp.base64_encode($round);
+		$found = false;
+		$round = 0;
+		$attemptSalts = array();
+		for($attempt = 0; $attempt < static::MINT_ATTEMPTS_MAX && !$found; $attempt++){
+			$attemptSalts[] = $salt;
+			$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
 			
-			$bits = $this->checkBits(hash('sha1', $testStamp, true));
-			$ok = $bits >= $this->getBits();
+			#fwrite(STDOUT, __METHOD__.' bits: '.$this->getBits()."\n");
+			#fwrite(STDOUT, __METHOD__.' rounds: '.$rounds."\n");
+			#fwrite(STDOUT, __METHOD__.' baseStamp: '.$baseStamp."\n");
 			
-			#if($round % 2000 == 0)
-			#if($round % 50 == 0 || $ok || $bits >= 10)
-			#if($round % 50 == 0 && $bits >= 10)
-			#fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
-			
-			if($ok){
-				#fwrite(STDOUT, __METHOD__.' round: '.$round.': '.$testStamp.', '.hash('sha1', $testStamp).', '.$bits."\n");
+			for($round = 0; $round < $rounds; $round++){
+				$testStamp = $baseStamp.$round;
+				#$testStamp = $baseStamp.base64_encode($round);
 				
-				$stamp = $testStamp;
-				$this->setSuffix($round);
-				break;
+				$bits = $this->checkBits(hash('sha1', $testStamp, true));
+				$found = $bits >= $this->getBits();
+				
+				#if($round % 100 == 0 && $bits >= 10 || $found)
+				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$this->getBits().', '.hash('sha1', $testStamp).', '.$bits."\n");
+				
+				if($found){
+					break;
+				}
 			}
-			#if($round >= 5) break;
+			
+			if(!$found){
+				$salt = base64_encode(Rand::data(16));
+			}
+		}
+		
+		if($found){
+			$stamp = $testStamp;
+			$this->setSuffix($round);
+			$this->setSalt($salt);
+		}
+		else{
+			throw new RuntimeException('Could not generate stamp after '.static::MINT_ATTEMPTS_MAX.' attempts, '
+				.'each with '.$rounds.' rounds. salts='.join(',', $attemptSalts));
 		}
 		
 		return $stamp;
