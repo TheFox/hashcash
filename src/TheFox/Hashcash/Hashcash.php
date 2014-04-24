@@ -258,7 +258,7 @@ class Hashcash{
 	
 	private function checkBits($data){
 		#fwrite(STDOUT, __METHOD__.''."\n");
-		$bits = 1;
+		$bits = 0;
 		
 		$dataLen = strlen($data);
 		for($charn = 0; $charn < $dataLen; $charn++){
@@ -268,20 +268,32 @@ class Hashcash{
 			
 			if($char){
 				for($bit = 7; $bit >= 0; $bit--){
+					$bits++;
+					#fwrite(STDOUT, $bits.' ');
+					
 					if($char & (1 << $bit)){
 						break;
 					}
-					#fwrite(STDOUT, $bits.' ');
-					$bits++;
 				}
+				#fwrite(STDOUT, ' - '.$bits.' ');
 				#fwrite(STDOUT, "\n");
 				break;
 			}
 			else{
 				$bits += 8;
+				
+				/*
+				for($bit = 7; $bit >= 0; $bit--){
+					$bits++;
+					fwrite(STDOUT, $bits.' ');
+				}
+				*/
+				#fwrite(STDOUT, ' - '.$bits.' ');
 				#fwrite(STDOUT, "\n");
 			}
 		}
+		
+		#fwrite(STDOUT, __METHOD__.' end: '.$bits."\n");
 		
 		return $bits;
 	}
