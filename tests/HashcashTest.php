@@ -109,13 +109,6 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('006be8d5964270b83cb7fcc2676df56be3e178ed', $hashcash->getHash());
 	}
 	
-	/*public function testMint2(){
-		$this->assertTrue(true);
-		
-		$hashcash = new Hashcash(10, 'example@example.com');
-		fwrite(STDOUT, __METHOD__.' mint: '.$hashcash->mint()."\n");
-	}*/
-	
 	public function testVerify(){
 		#$this->markTestIncomplete('This test has not been implemented yet.');
 		$this->assertTrue(true); return;
