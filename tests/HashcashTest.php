@@ -106,6 +106,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$hashcash->setResource('thefox');
 		$hashcash->setSalt('2B6kv/rFiCdJRzqhH7P2eA==');
 		$this->assertEquals('1:10:140325:thefox::2B6kv/rFiCdJRzqhH7P2eA==:129', $hashcash->mint());
+		$this->assertEquals('006be8d5964270b83cb7fcc2676df56be3e178ed', $hashcash->getHash());
 	}
 	
 	/*public function testMint2(){
