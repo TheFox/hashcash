@@ -160,7 +160,7 @@ class Hashcash{
 				$found = $bits >= $this->getBits();
 				
 				#if($round % 100 == 0 && $bits >= 10 || $found)
-				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$this->getBits().', '.hash('sha1', $testStamp).', '.$bits."\n");
+				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$this->getBits().'>='.$bits.', '.hash('sha1', $testStamp)."\n");
 				
 				if($found){
 					break;
@@ -238,6 +238,9 @@ class Hashcash{
 			
 			$date = new DateTime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 			$now = new DateTime('now');
+			
+			#var_export($date);
+			#var_export($now);
 			
 			if($date->getTimestamp() < $now->getTimestamp() - $this->getExpiration()){
 				$verified = false;
