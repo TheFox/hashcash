@@ -277,12 +277,13 @@ class Hashcash{
 			
 			if($char){
 				for($bit = 7; $bit >= 0; $bit--){
-					$bits++;
 					#fwrite(STDOUT, $bits.' ');
 					
 					if($char & (1 << $bit)){
 						break;
 					}
+					
+					$bits++;
 				}
 				#fwrite(STDOUT, ' - '.$bits.' ');
 				#fwrite(STDOUT, "\n");
