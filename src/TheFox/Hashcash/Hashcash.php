@@ -225,7 +225,7 @@ class Hashcash{
 		#$verified = $bits >= $this->getBits();
 		
 		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
-		$verified = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+		$verified = $this->checkBitsFast(substr(hash('sha1', $stamp, true), 0, $bytes), $bytes, $this->getBits());
 		
 		if($verified && $this->getExpiration()){
 			$dateLen = strlen($this->getDate());
