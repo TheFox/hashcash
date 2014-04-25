@@ -14,7 +14,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	public function testBasic(){
-		fwrite(STDOUT, __METHOD__.''."\n");
+		#fwrite(STDOUT, __METHOD__.''."\n");
 		#$this->markTestIncomplete('This test has not been implemented yet.');
 		
 		$this->assertTrue(in_array('sha1', hash_algos()), 'sha1 algorithm not found.');
@@ -65,7 +65,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$hashcash->setResource('mint2');
 		$hashcash->setExtension('ext2');
 		$hashcash->setSalt('salt2');
-		$this->assertEquals('1:20:140422:mint2:ext2:salt2:22060', $hashcash->mint());
+		$this->assertEquals('1:20:140422:mint2:ext2:salt2:256507', $hashcash->mint());
 		
 		$hashcash = new Hashcash();
 		$hashcash->setVersion(1);
@@ -73,7 +73,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$hashcash->setDate('870221');
 		$hashcash->setResource('thefox');
 		$hashcash->setSalt('2B6kv/rFiCdJRzqhH7P2eA==');
-		$this->assertEquals('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358', $hashcash->mint());
+		$this->assertEquals('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214', $hashcash->mint());
 		
 		$hashcash = new Hashcash();
 		$hashcash->setVersion(1);
@@ -96,34 +96,36 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$hashcash->setBits(10);
 		$hashcash->setDate('140401');
 		$hashcash->setResource('thefox');
-		$hashcash->setSalt('2B6kv/rFiCdJRzqhH7P2eA==');
-		$this->assertEquals('1:10:140401:thefox::2B6kv/rFiCdJRzqhH7P2eA==:293', $hashcash->mint());
+		$hashcash->setSalt('P6MQOtdvyVIwmHRT3ansdQ==');
+		$this->assertEquals('1:10:140401:thefox::P6MQOtdvyVIwmHRT3ansdQ==:280', $hashcash->mint());
 		
 		$hashcash = new Hashcash();
 		$hashcash->setVersion(1);
 		$hashcash->setBits(10);
 		$hashcash->setDate('140325');
 		$hashcash->setResource('thefox');
-		$hashcash->setSalt('2B6kv/rFiCdJRzqhH7P2eA==');
-		$this->assertEquals('1:10:140325:thefox::2B6kv/rFiCdJRzqhH7P2eA==:129', $hashcash->mint());
-		$this->assertEquals('006be8d5964270b83cb7fcc2676df56be3e178ed', $hashcash->getHash());
+		$hashcash->setSalt('Ifr62IiXO9YHQ2tXyqSOUQ==');
+		$this->assertEquals('1:10:140325:thefox::Ifr62IiXO9YHQ2tXyqSOUQ==:677', $hashcash->mint());
+		$this->assertEquals('002fa43c5c99d8527485727d1aad584287a35686', $hashcash->getHash());
 	}
 	
 	public function testVerify(){
 		#$this->markTestIncomplete('This test has not been implemented yet.');
-		$this->assertTrue(true); return;
+		#$this->assertTrue(true); return;
 		
 		$hashcash = new Hashcash();
 		$hashcash->setExpiration(0);
+		
 		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2::ArrRIabEj3nZrOcM:0000000000007u1E') );
 		$this->assertTrue(  $hashcash->verify('1:24:140422:mint2:ext1:Nde2ffWsRoe3DXVQ:00000001M+iu') );
-		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2:ext2:salt2:22060') );
+		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2:ext2:salt2:256507') );
 		$this->assertTrue(  $hashcash->verify('1:28:140422:::s15xXleWocBKSA95Zw4e1Q==:245861178') );
+		$this->assertTrue(  $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214') );
+		
 		$this->assertFalse( $hashcash->verify('1:20:140422:mint3::ArrRIabEj3nZrOcM:0000000000007u1E') );
-		$this->assertTrue(  $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358') );
 		
 		$hashcash->setExpiration(3600 * 24 * 365);
-		$this->assertFalse( $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:532358') );
+		$this->assertFalse( $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214') );
 		
 		
 		$hashcash1 = new Hashcash();
@@ -165,6 +167,8 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 	 * @expectedExceptionCode 2
 	 */
 	public function testVerifyInvalidArgumentException2(){
+		#$this->assertTrue(true);
+		
 		$hashcash = new Hashcash();
 		$hashcash->verify('1:20:140422:mint2:ext2:22060');
 	}
