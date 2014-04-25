@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use DateTime;
 
 use TheFox\Utilities\Rand;
+use TheFox\Utilities\Bin;
 
 class Hashcash{
 	
@@ -136,6 +137,8 @@ class Hashcash{
 		$rounds = pow(2, $this->getBits());
 		$salt = $this->getSalt();
 		
+		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
+		
 		if(!$salt){
 			$salt = base64_encode(Rand::data(16));
 		}
@@ -160,9 +163,11 @@ class Hashcash{
 				$found = $bits >= $this->getBits();
 				
 				#if($round % 100 == 0 && $bits >= 10 || $found)
-				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$this->getBits().'>='.$bits.', '.hash('sha1', $testStamp)."\n");
+				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$bits.'>='.$this->getBits().', '.hash('sha1', $testStamp)."\n");
 				
 				if($found){
+					#Bin::debugData(hash('sha1', $testStamp, true));
+					
 					break;
 				}
 			}
@@ -260,11 +265,15 @@ class Hashcash{
 		#fwrite(STDOUT, __METHOD__.''."\n");
 		$bits = 0;
 		
+		#fwrite(STDOUT, "\n");
+		#Bin::debugData($data);
+		
 		$dataLen = strlen($data);
 		for($charn = 0; $charn < $dataLen; $charn++){
 			$char = ord($data[$charn]);
 			
-			#fwrite(STDOUT, "charn $charn: ".( sprintf('%d', $char) )."\n"."\t\t ");
+			#fwrite(STDOUT, "charn $charn: ".( sprintf('%d', $char) )."\n");
+			#fwrite(STDOUT, "\t\t ");
 			
 			if($char){
 				for($bit = 7; $bit >= 0; $bit--){
@@ -282,12 +291,12 @@ class Hashcash{
 			else{
 				$bits += 8;
 				
-				/*
-				for($bit = 7; $bit >= 0; $bit--){
+				/*for($bit = 7; $bit >= 0; $bit--){
 					$bits++;
-					fwrite(STDOUT, $bits.' ');
+					#fwrite(STDOUT, '{'.$bits.'} ');
 				}
 				*/
+				
 				#fwrite(STDOUT, ' - '.$bits.' ');
 				#fwrite(STDOUT, "\n");
 			}
