@@ -5,8 +5,8 @@ namespace TheFox\Utilities;
 class Bin{
 	
 	public static function debugData($data){
-		fwrite(STDOUT, "ddd xx    b b b b  b b b b\n\n");
-		fwrite(STDOUT, "--- --    ----------------\n\n");
+		fwrite(STDOUT, "ddd xx    b b b b  b b b b\n");
+		fwrite(STDOUT, "--- --    ----------------\n");
 		
 		$dataLen = strlen($data);
 		for($pos = 0; $pos < $dataLen; $pos++){
