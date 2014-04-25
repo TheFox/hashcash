@@ -135,6 +135,7 @@ class Hashcash{
 		$stamp = '';
 		
 		$rounds = pow(2, $this->getBits());
+		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
 		$salt = $this->getSalt();
 		
 		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
@@ -146,6 +147,7 @@ class Hashcash{
 		$found = false;
 		$attempt = 0;
 		$round = 0;
+		$bits = 0;
 		$attemptSalts = array();
 		for($attempt = 0; $attempt < static::MINT_ATTEMPTS_MAX && !$found; $attempt++){
 			$attemptSalts[] = $salt;
@@ -159,11 +161,14 @@ class Hashcash{
 				$testStamp = $baseStamp.$round;
 				#$testStamp = $baseStamp.base64_encode($round);
 				
-				$bits = $this->checkBits(hash('sha1', $testStamp, true));
-				$found = $bits >= $this->getBits();
+				#$bits = $this->checkBits(hash('sha1', $testStamp, true));
+				#$found = $bits >= $this->getBits();
+				$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 				
 				#if($round % 100 == 0 && $bits >= 10 || $found)
 				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$bits.'>='.$this->getBits().', '.hash('sha1', $testStamp)."\n");
+				#if($round % 100 == 0 || $found)
+				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
 				
 				if($found){
 					#Bin::debugData(hash('sha1', $testStamp, true));
@@ -216,8 +221,12 @@ class Hashcash{
 		
 		#var_export($this);
 		
-		$bits = $this->checkBits(hash('sha1', $stamp, true));
-		$verified = $bits >= $this->getBits();
+		#$bits = $this->checkBits(hash('sha1', $stamp, true));
+		#$verified = $bits >= $this->getBits();
+		
+		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+		$verified = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+		
 		if($verified && $this->getExpiration()){
 			$dateLen = strlen($this->getDate());
 			$year = '';
@@ -256,7 +265,7 @@ class Hashcash{
 			#fwrite(STDOUT, __METHOD__.' exp:  '.($now->getTimestamp() - $this->getExpiration()).' '.(int)$verified."\n");
 		}
 		
-		#fwrite(STDOUT, __METHOD__.' bits: '.$bits.' = '.$this->getBits().', '.(int)$verified."\n");
+		#fwrite(STDOUT, __METHOD__.' bits: '.$bits.'>='.$this->getBits().', '.(int)$verified."\n");
 		
 		return $verified;
 	}
@@ -306,6 +315,19 @@ class Hashcash{
 		#fwrite(STDOUT, __METHOD__.' end: '.$bits."\n");
 		
 		return $bits;
+	}
+	
+	private function checkBitsFast($data, $bytes, $bits){
+		#fwrite(STDOUT, __METHOD__.': '.$bytes.', '.$bits.''."\n");
+		
+		$last = $bytes - 1;
+		
+		if(substr($data, 0, $last) == str_repeat("\x00", $last) && 
+			ord(substr($data, -1)) >> ($bytes * 8 - $bits) == 0 ){
+			return true;
+		}
+		
+		return false;
 	}
 	
 }
