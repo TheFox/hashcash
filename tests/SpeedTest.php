@@ -37,8 +37,7 @@ if($test1){
 		pcntl_alarm(TIME_MAX);
 		$stamp = $hashcash->mint();
 		
-		fwrite(STDOUT, (time() - $start).'sec ');
-		fwrite(STDOUT, '"'.$stamp.'" - '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, (time() - $start).'sec '.'"'.$stamp.'"   '.$hashcash->getHash()."\n");
 		
 		if(!$stamp) break;
 	}
@@ -46,9 +45,12 @@ if($test1){
 
 // Test 2
 if($test2){
+	
 	$bits = 19;
+	$loops = 100;
+	
 	$seconds = array();
-	for($n = 0; $n < 1000; $n++){
+	for($n = 0; $n < $loops; $n++){
 		$hashcash = new Hashcash($bits, 'example@example.com');
 		$stamp = '';
 		
@@ -65,11 +67,18 @@ if($test2){
 		$t = time() - $start;
 		$seconds[] = $t;
 		
-		fwrite(STDOUT, $t.'sec ');
-		fwrite(STDOUT, '"'.$stamp.'" - '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, $t.'sec '.'"'.$stamp.'"   '.$hashcash->getHash()."\n");
+		#if($stamp) fwrite(STDOUT, $stamp."\n");
 		
 	}
 
-	var_export($seconds);
+	#var_export($seconds);
+	
+	$sum = 0;
+	foreach($seconds as $time){
+		$sum += $time;
+	}
+	
+	fwrite(STDOUT, "avg: ".($sum / $loops)."\n");
 }
 
