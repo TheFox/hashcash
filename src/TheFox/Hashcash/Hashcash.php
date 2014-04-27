@@ -147,6 +147,7 @@ class Hashcash{
 		$found = false;
 		$attempt = 0;
 		$round = 0;
+		$testStamp = '';
 		$bits = 0;
 		$attemptSalts = array();
 		for($attempt = 0; $attempt < static::MINT_ATTEMPTS_MAX && !$found; $attempt++){
