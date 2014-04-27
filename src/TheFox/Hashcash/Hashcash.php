@@ -21,9 +21,9 @@ class Hashcash{
 	const MINT_ATTEMPTS_MAX = 10;
 	
 	private $version = 1;
-	private $bits = 0;
-	private $date = '';
-	private $resource = '';
+	private $bits;
+	private $date;
+	private $resource;
 	private $extension = '';
 	private $salt = '';
 	private $suffix = '';
