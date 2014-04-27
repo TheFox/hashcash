@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 use TheFox\Hashcash\Hashcash;
 
 
-// Example 1: simple mint
+// Example 1: simple mint (real world example)
 $hashcash = new Hashcash();
 $hashcash->setBits(20);
 $hashcash->setResource('example@example.com');
@@ -17,7 +17,7 @@ catch(Exception $e){
 }
 
 
-// Example 2a: simple mint, another way
+// Example 2a: simple mint, another way (real world example)
 $hashcash = new Hashcash(20, 'example@example.com');
 $stamp = '';
 try{
@@ -28,7 +28,7 @@ catch(Exception $e){
 	print "ERROR 2: ".$e->getMessage()."\n";
 }
 
-// Example 2b: verify a stamp
+// Example 2b: verify a stamp (real world example)
 $hashcash = new Hashcash();
 try{
 	print "stamp2 verify: '".( $hashcash->verify($stamp) ? 'Ok' : 'failed' )."'\n";
