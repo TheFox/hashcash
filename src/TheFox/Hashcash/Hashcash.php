@@ -18,7 +18,7 @@ class Hashcash{
 	
 	const DATE_FORMAT = 'ymd';
 	const EXPIRATION = 2419200; // 28 days
-	const MINT_ATTEMPTS_MAX = 3;
+	const MINT_ATTEMPTS_MAX = 10;
 	
 	private $version = 1;
 	private $bits = 0;
