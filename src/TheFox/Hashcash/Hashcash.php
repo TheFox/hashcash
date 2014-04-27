@@ -222,7 +222,7 @@ class Hashcash{
 			$salt = base64_encode(Rand::data(16));
 		}
 		
-		fwrite(STDOUT, 'bits: '.$this->getBits()."\n");
+		#fwrite(STDOUT, 'bits: '.$this->getBits()."\n");
 		#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
 		#fwrite(STDOUT, "\t".' baseStamp: '.$baseStamp."\n");
 		
@@ -230,8 +230,8 @@ class Hashcash{
 			$testStamp = $baseStamp.$round;
 			$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 			
-			if($round % 1000 == 0 || $found)
-			fwrite(STDOUT, "\t".' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
+			#if($round % 1000 == 0 || $found)
+			#fwrite(STDOUT, "\t".' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
 			
 			if($found){
 				$stamps[] = $testStamp;
