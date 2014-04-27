@@ -10,11 +10,10 @@ declare(ticks = 1);
 
 const TIME_MAX = 30;
 
-$test1 = 0;
-$test2 = 1;
+$tests = array( 1, 0 );
 
 // Test 1
-if($test1){
+if($tests[0]){
 	print "time max: ".TIME_MAX."\n";
 
 	$exit = false;
@@ -44,9 +43,9 @@ if($test1){
 }
 
 // Test 2
-if($test2){
+if($tests[1]){
 	
-	$bits = 19;
+	$bits = 20;
 	$loops = 100;
 	
 	$seconds = array();
