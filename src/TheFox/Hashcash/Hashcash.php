@@ -191,7 +191,7 @@ class Hashcash{
 		}
 		else{
 			throw new RuntimeException('Could not generate stamp after '.static::MINT_ATTEMPTS_MAX.' attempts, '
-				.'each with '.$rounds.' rounds. salts='.join(',', $attemptSalts));
+				.'each with '.$rounds.' rounds. bits='.$this->getBits().', date='.$this->getDate().', resource='.$this->getResource().', salts='.join(',', $attemptSalts));
 		}
 		
 		return $stamp;
