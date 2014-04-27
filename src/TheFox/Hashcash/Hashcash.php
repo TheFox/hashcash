@@ -176,9 +176,9 @@ class Hashcash{
 				$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 				
 				#if($round % 100 == 0 && $bits >= 10 || $found)
-				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$bits.'>='.$this->getBits().', '.hash('sha1', $testStamp)."\n");
+				#fwrite(STDOUT, ' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$bits.'>='.$this->getBits().', '.hash('sha1', $testStamp)."\n");
 				#if($round % 100 == 0 || $found)
-				#fwrite(STDOUT, __METHOD__.' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
+				#fwrite(STDOUT, ' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
 				
 				if($found){
 					#Bin::debugData(hash('sha1', $testStamp, true));
