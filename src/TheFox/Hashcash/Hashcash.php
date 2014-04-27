@@ -146,10 +146,8 @@ class Hashcash{
 		
 		$rounds = pow(2, $this->getBits());
 		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+		
 		$salt = $this->getSalt();
-		
-		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
-		
 		if(!$salt){
 			$salt = base64_encode(Rand::data(16));
 		}
