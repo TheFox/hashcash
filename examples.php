@@ -83,4 +83,34 @@ catch(Exception $e){
 	print "ERROR 7: ".$e->getMessage()."\n";
 }
 
+
+// Example 5: use 1 attempt, must fail with this configuration
+$hashcash = new Hashcash(19, 'example@example.com');
+$hashcash->setDate('140427');
+$hashcash->setSalt('axfcrlV1hxLvF6J9BeDiLw==');
+$hashcash->setMintAttemptsMax(1);
+$stamp = '';
+try{
+	$stamp = $hashcash->mint();
+	print "stamp5: '".$stamp."'\n";
+}
+catch(Exception $e){
+	print "ERROR 8: ".$e->getMessage()."\n";
+}
+
+
+// Example 6: use infinite attempts
+$hashcash = new Hashcash(19, 'example@example.com');
+$hashcash->setDate('140427');
+$hashcash->setSalt('axfcrlV1hxLvF6J9BeDiLw==');
+$hashcash->setMintAttemptsMax(0); // Use infinite attempts
+$stamp = '';
+try{
+	$stamp = $hashcash->mint();
+	print "stamp6: '".$stamp."'\n";
+}
+catch(Exception $e){
+	print "ERROR 9: ".$e->getMessage()."\n";
+}
+
 ?>

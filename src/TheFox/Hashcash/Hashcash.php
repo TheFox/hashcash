@@ -30,12 +30,14 @@ class Hashcash{
 	private $expiration = 0;
 	private $attempts = 0;
 	private $hash = '';
+	private $mintAttemptsMax;
 	
 	public function __construct($bits = 20, $resource = ''){
 		$this->setBits($bits);
 		$this->setDate(date(static::DATE_FORMAT));
 		$this->setResource($resource);
 		$this->setExpiration(static::EXPIRATION);
+		$this->setMintAttemptsMax(static::MINT_ATTEMPTS_MAX);
 	}
 	
 	public function setVersion($version){
@@ -130,6 +132,14 @@ class Hashcash{
 		return $this->hash;
 	}
 	
+	public function setMintAttemptsMax($mintAttemptsMax){
+		$this->mintAttemptsMax = (int)$mintAttemptsMax;
+	}
+	
+	public function getMintAttemptsMax(){
+		return (int)$this->mintAttemptsMax;
+	}
+	
 	public function mint(){
 		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamp = '';
@@ -150,13 +160,14 @@ class Hashcash{
 		$testStamp = '';
 		$bits = 0;
 		$attemptSalts = array();
-		for($attempt = 0; $attempt < static::MINT_ATTEMPTS_MAX && !$found; $attempt++){
+		for($attempt = 0; ($attempt < $this->getMintAttemptsMax() || !$this->getMintAttemptsMax()) && !$found; $attempt++){
 			$attemptSalts[] = $salt;
 			$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
 			
-			#fwrite(STDOUT, __METHOD__.' bits: '.$this->getBits()."\n");
-			#fwrite(STDOUT, __METHOD__.' rounds: '.$rounds."\n");
-			#fwrite(STDOUT, __METHOD__.' baseStamp: '.$baseStamp."\n");
+			#fwrite(STDOUT, 'attempt: '.$attempt.'/'.$this->getMintAttemptsMax()."\n");
+			#fwrite(STDOUT, "\t".' bits: '.$this->getBits()."\n");
+			#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
+			#fwrite(STDOUT, "\t".' baseStamp: '.$baseStamp."\n");
 			
 			for($round = 0; $round < $rounds; $round++){
 				$testStamp = $baseStamp.$round;
@@ -191,11 +202,45 @@ class Hashcash{
 			$this->setHash(hash('sha1', $stamp));
 		}
 		else{
-			throw new RuntimeException('Could not generate stamp after '.static::MINT_ATTEMPTS_MAX.' attempts, '
+			throw new RuntimeException('Could not generate stamp after '.$attempt.' attempts, '
 				.'each with '.$rounds.' rounds. bits='.$this->getBits().', date='.$this->getDate().', resource='.$this->getResource().', salts='.join(',', $attemptSalts));
 		}
 		
 		return $stamp;
+	}
+	
+	public function mintAll(){
+		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
+		$stamps = array();
+		
+		$rounds = pow(2, $this->getBits());
+		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+		$salt = $this->getSalt();
+		$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
+		
+		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
+		
+		if(!$salt){
+			$salt = base64_encode(Rand::data(16));
+		}
+		
+		fwrite(STDOUT, 'bits: '.$this->getBits()."\n");
+		#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
+		#fwrite(STDOUT, "\t".' baseStamp: '.$baseStamp."\n");
+		
+		for($round = 0; $round < $rounds; $round++){
+			$testStamp = $baseStamp.$round;
+			$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+			
+			if($round % 1000 == 0 || $found)
+			fwrite(STDOUT, "\t".' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
+			
+			if($found){
+				$stamps[] = $testStamp;
+			}
+		}
+		
+		return $stamps;
 	}
 	
 	public function verify($stamp){
