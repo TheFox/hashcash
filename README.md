@@ -4,7 +4,7 @@ PHP implementation of [Hashcash](http://hashcash.org) 1.
 ## Installation
 The preferred method of installation is via [Packagist](https://packagist.org/packages/thefox/hashcash) and [Composer](https://getcomposer.org/). Run the following command to install the package and add it as a requirement to composer.json:
 
-`composer.phar require "thefox/hashcash=1.0.*"`
+`composer.phar require "thefox/hashcash=1.1.*"`
 
 ## Usage
 See `examples.php` for more examples.
