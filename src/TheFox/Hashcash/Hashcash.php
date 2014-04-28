@@ -230,7 +230,8 @@ class Hashcash{
 			$testStamp = $baseStamp.$round;
 			$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 			
-			#if($round % 1000 == 0 || $found)
+			#if($round % 1000000 == 0 || $found)
+			#if($found)
 			#fwrite(STDOUT, "\t".' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
 			
 			if($found){
