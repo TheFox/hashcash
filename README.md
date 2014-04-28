@@ -12,6 +12,7 @@ See `examples.php` for more examples.
 ```php
 <?php
 require 'vendor/autoload.php';
+use TheFox\Hashcash\Hashcash;
 $hashcash = new Hashcash(20, 'example@example.com');
 print "hashcash stamp: '".$hashcash->mint()."'\n";
 ?>
