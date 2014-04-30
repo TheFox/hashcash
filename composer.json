@@ -1,6 +1,6 @@
 {
 	"name": "thefox/hashcash",
-	"description": "Hashcash implementation in PHP",
+	"description": "Hashcash implementation in PHP.",
 	"type": "library",
 	"keywords": [
 		"Hashcash",
