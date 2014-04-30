@@ -12,18 +12,20 @@ const TIME_MAX = 30;
 
 $tests = array( 1, 0 );
 
+
+$exit = false;
+
+function sig(){
+	global $exit;
+	$exit = true;
+}
+
 // Test 1
 if($tests[0]){
-	print "time max: ".TIME_MAX."\n";
-
-	$exit = false;
-	function sig($no){
-		global $exit;
-		$exit = true;
-		#print "ALARM: $no\n";
-	}
+	print 'time max: '.TIME_MAX."\n";
+	
 	$sig = pcntl_signal(SIGALRM, 'sig');
-	print "signal setup: ".($sig ? 'ok' : 'failed')."\n";
+	print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
 
 
 	for($bits = 10; $bits < 52 && !$exit; $bits++){
@@ -36,7 +38,7 @@ if($tests[0]){
 		pcntl_alarm(TIME_MAX);
 		$stamp = $hashcash->mint();
 		
-		fwrite(STDOUT, (time() - $start).'sec '.'"'.$stamp.'"   '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, (time() - $start).'sec "'.$stamp.'"   '.$hashcash->getHash()."\n");
 		
 		if(!$stamp) break;
 	}
@@ -66,7 +68,7 @@ if($tests[1]){
 		$t = time() - $start;
 		$seconds[] = $t;
 		
-		fwrite(STDOUT, $t.'sec '.'"'.$stamp.'"   '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, $t.'sec "'.$stamp.'"   '.$hashcash->getHash()."\n");
 		#if($stamp) fwrite(STDOUT, $stamp."\n");
 		
 	}
@@ -78,6 +80,6 @@ if($tests[1]){
 		$sum += $time;
 	}
 	
-	fwrite(STDOUT, "avg: ".($sum / $loops)."\n");
+	fwrite(STDOUT, 'avg: '.($sum / $loops)."\n");
 }
 
