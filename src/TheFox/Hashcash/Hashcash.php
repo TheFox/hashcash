@@ -45,7 +45,8 @@ class Hashcash{
 			throw new RuntimeException('Version 0 not implemented yet.');
 		}
 		elseif($version > 1){
-			throw new RuntimeException('Version '.$version.' not implemented yet.');
+			throw new RuntimeException(
+				'Version '.$version.' not implemented yet.');
 		}
 		
 		$this->version = (int)$version;
@@ -66,7 +67,8 @@ class Hashcash{
 	public function setDate($date){
 		$dateLen = strlen($date);
 		if($dateLen != 6 && $dateLen != 10 && $dateLen != 12){
-			throw new InvalidArgumentException('Date "'.$date.'" is not valid.', 1);
+			throw new InvalidArgumentException(
+				'Date "'.$date.'" is not valid.', 1);
 		}
 		
 		$this->date = $date;
@@ -152,33 +154,40 @@ class Hashcash{
 			$salt = base64_encode(Rand::data(16));
 		}
 		
+		$baseStamp = $this->getVersion().':'.$this->getBits();
+		$baseStamp .= ':'.$this->getDate();
+		$baseStamp .= ':'.$this->getResource().':'.$this->getExtension().':';
+		
 		$found = false;
-		$attempt = 0;
 		$round = 0;
 		$testStamp = '';
 		$bits = 0;
 		$attemptSalts = array();
-		for($attempt = 0; ($attempt < $this->getMintAttemptsMax() || !$this->getMintAttemptsMax()) && !$found; $attempt++){
+		$attempt = 0;
+		for(; ($attempt < $this->getMintAttemptsMax() || !$this->getMintAttemptsMax()) && !$found; $attempt++){
 			$attemptSalts[] = $salt;
-			$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
+			$attemptStamp = $baseStamp.$salt.':';
 			
 			#fwrite(STDOUT, 'attempt: '.$attempt.'/'.$this->getMintAttemptsMax()."\n");
 			#fwrite(STDOUT, "\t".' bits: '.$this->getBits()."\n");
 			#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
-			#fwrite(STDOUT, "\t".' baseStamp: '.$baseStamp."\n");
+			#fwrite(STDOUT, "\t".' attemptStamp: '.$attemptStamp."\n");
 			
 			for($round = 0; $round < $rounds; $round++){
-				$testStamp = $baseStamp.$round;
-				#$testStamp = $baseStamp.base64_encode($round);
+				$testStamp = $attemptStamp.$round;
+				#$testStamp = $attemptStamp.base64_encode($round);
 				
 				#$bits = $this->checkBits(hash('sha1', $testStamp, true));
 				#$found = $bits >= $this->getBits();
-				$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+				$found = $this->checkBitsFast(
+					substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 				
+				#$percent = sprintf('%.4f', $round / $rounds * 100).' %';
+				#$hash = hash('sha1', $testStamp);
 				#if($round % 100 == 0 && $bits >= 10 || $found)
-				#fwrite(STDOUT, ' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.$bits.'>='.$this->getBits().', '.hash('sha1', $testStamp)."\n");
+				#fwrite(STDOUT, ' round '.$round.' '.$percent.' - '.$bits.'>='.$this->getBits().', '.$hash."\n");
 				#if($round % 100 == 0 || $found)
-				#fwrite(STDOUT, ' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
+				#fwrite(STDOUT, ' round '.$round.' '.$percent.' - '.$hash."\n");
 				
 				if($found){
 					#Bin::debugData(hash('sha1', $testStamp, true));
@@ -200,8 +209,13 @@ class Hashcash{
 			$this->setHash(hash('sha1', $stamp));
 		}
 		else{
-			throw new RuntimeException('Could not generate stamp after '.$attempt.' attempts, '
-				.'each with '.$rounds.' rounds. bits='.$this->getBits().', date='.$this->getDate().', resource='.$this->getResource().', salts='.join(',', $attemptSalts));
+			$msg = 'Could not generate stamp after '.$attempt.' attempts, ';
+			$msg .= 'each with '.$rounds.' rounds. ';
+			$msg .= 'bits='.$this->getBits().', ';
+			$msg .= 'date='.$this->getDate().', ';
+			$msg .= 'resource='.$this->getResource().', ';
+			$msg .= 'salts='.join(',', $attemptSalts);
+			throw new RuntimeException($msg);
 		}
 		
 		return $stamp;
@@ -214,7 +228,10 @@ class Hashcash{
 		$rounds = pow(2, $this->getBits());
 		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
 		$salt = $this->getSalt();
-		$baseStamp = $this->getVersion().':'.$this->getBits().':'.$this->getDate().':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
+		
+		$baseStamp = $this->getVersion().':'.$this->getBits();
+		$baseStamp .= ':'.$this->getDate();
+		$baseStamp .= ':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
 		
 		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
 		
@@ -230,9 +247,10 @@ class Hashcash{
 			$testStamp = $baseStamp.$round;
 			$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 			
+			#$percent = sprintf('%.4f', $round / $rounds * 100).' %';
 			#if($round % 1000000 == 0 || $found)
 			#if($found)
-			#fwrite(STDOUT, "\t".' round '.$round.' '.sprintf('%.4f', $round / $rounds * 100).' % - '.hash('sha1', $testStamp)."\n");
+			#fwrite(STDOUT, "\t".' round '.$round.' '.$percent.' - '.hash('sha1', $testStamp)."\n");
 			
 			if($found){
 				$stamps[] = $testStamp;
