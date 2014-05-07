@@ -3,10 +3,15 @@
 	"description": "Hashcash implementation in PHP.",
 	"type": "library",
 	"keywords": [
-		"Hashcash",
-		"Hash",
-		"Cash",
-		"sha1"
+		"proof-of-work",
+		"proofofwork",
+		"hashcash",
+		"hash",
+		"cash",
+		"sha1",
+		"pow",
+		"proof",
+		"work"
 	],
 	"homepage": "http://fox21.at",
 	"license": "GPLv3",
