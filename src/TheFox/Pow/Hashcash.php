@@ -5,7 +5,7 @@
 	https://pthree.org/2011/03/24/hashcash-and-mutt/
 */
 
-namespace TheFox\Hashcash;
+namespace TheFox\Pow;
 
 use RuntimeException;
 use InvalidArgumentException;

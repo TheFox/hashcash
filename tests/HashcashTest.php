@@ -1,6 +1,6 @@
 <?php
 
-use TheFox\Hashcash\Hashcash;
+use TheFox\Pow\Hashcash;
 
 class HashcashTest extends PHPUnit_Framework_TestCase{
 	

@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-use TheFox\Hashcash\Hashcash;
+use TheFox\Pow\Hashcash;
 use TheFox\Utilities\Hex;
 
 declare(ticks = 1);

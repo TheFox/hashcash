@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-use TheFox\Hashcash\Hashcash;
+use TheFox\Pow\Hashcash;
 
 
 // Example 1: simple mint (real world example)
