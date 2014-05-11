@@ -1,6 +1,9 @@
 # Hashcash
 PHP implementation of [Hashcash](http://hashcash.org) 1.
 
+[![Latest Version](http://img.shields.io/github/tag/thefox/hashcash.svg)](https://github.com/TheFox/hashcash/releases)
+[![Dependency Status](https://www.versioneye.com/php/thefox:hashcash/1.3.0/badge.png)](https://www.versioneye.com/php/thefox:hashcash/1.3.0)
+
 ## Installation
 The preferred method of installation is via [Packagist](https://packagist.org/packages/thefox/hashcash) and [Composer](https://getcomposer.org/). Run the following command to install the package and add it as a requirement to composer.json:
 
