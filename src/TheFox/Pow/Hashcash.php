@@ -31,6 +31,7 @@ class Hashcash{
 	private $attempts = 0;
 	private $hash = '';
 	private $mintAttemptsMax;
+	private $stamp = '';
 	
 	public function __construct($bits = 20, $resource = ''){
 		$this->setBits($bits);
@@ -142,6 +143,14 @@ class Hashcash{
 		return (int)$this->mintAttemptsMax;
 	}
 	
+	public function setStamp($stamp){
+		$this->stamp = $stamp;
+	}
+	
+	public function getStamp(){
+		return $this->stamp;
+	}
+	
 	public function mint(){
 		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamp = '';
@@ -218,6 +227,7 @@ class Hashcash{
 			throw new RuntimeException($msg);
 		}
 		
+		$this->setStamp($stamp);
 		return $stamp;
 	}
 	
