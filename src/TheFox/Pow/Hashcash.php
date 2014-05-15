@@ -270,9 +270,7 @@ class Hashcash{
 		return $stamps;
 	}
 	
-	public function verify($stamp){
-		#fwrite(STDOUT, __METHOD__.' stamp: "'.$stamp.'"'."\n");
-		
+	public function parseStamp($stamp){
 		if(!$stamp){
 			throw new InvalidArgumentException('Stamp "'.$stamp.'" is not valid.', 1);
 		}
@@ -282,8 +280,6 @@ class Hashcash{
 			throw new InvalidArgumentException('Stamp "'.$stamp.'" is not valid.', 2);
 		}
 		
-		$verified = false;
-		
 		$this->setVersion($items[0]);
 		$this->setBits($items[1]);
 		$this->setDate($items[2]);
@@ -291,11 +287,12 @@ class Hashcash{
 		$this->setExtension($items[4]);
 		$this->setSalt($items[5]);
 		$this->setSuffix($items[6]);
+	}
+	
+	public function verify($stamp){
+		$this->parseStamp($stamp);
 		
-		#var_export($this);
-		
-		#$bits = $this->checkBits(hash('sha1', $stamp, true));
-		#$verified = $bits >= $this->getBits();
+		$verified = false;
 		
 		$bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
 		$verified = $this->checkBitsFast(substr(hash('sha1', $stamp, true), 0, $bytes), $bytes, $this->getBits());
