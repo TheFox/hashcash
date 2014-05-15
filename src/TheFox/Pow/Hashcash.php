@@ -148,6 +148,14 @@ class Hashcash{
 	}
 	
 	public function getStamp(){
+		if(!$this->stamp){
+			$stamp = $this->getVersion().':'.$this->getBits();
+			$stamp .= ':'.$this->getDate();
+			$stamp .= ':'.$this->getResource().':'.$this->getExtension();
+			$stamp .= ':'.$this->getSalt().':'.$this->getSuffix();
+			
+			$this->stamp = $stamp;
+		}
 		return $this->stamp;
 	}
 	
