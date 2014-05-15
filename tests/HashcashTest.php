@@ -20,7 +20,15 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue(in_array('sha1', hash_algos()), 'sha1 algorithm not found.');
 	}
 	
-	public function testSetGet(){
+	public function testSetGet1(){
+		#$this->assertTrue(true); return;
+		
+		$hashcash = new Hashcash(21, 'test1');
+		$this->assertEquals(21, $hashcash->getBits());
+		$this->assertEquals('test1', $hashcash->getResource());
+	}
+	
+	public function testSetGet2(){
 		#$this->assertTrue(true); return;
 		
 		$hashcash = new Hashcash(21, 'test1');
