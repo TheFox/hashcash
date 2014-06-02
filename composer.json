@@ -24,8 +24,8 @@
 	],
 	"require": {
 		"php": ">=5.3",
-		"thefox/utilities": "1.0.*",
-		"symfony/yaml": "2.4.*"
+		"thefox/utilities": "1.1.*",
+		"symfony/yaml": "2.5.*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "4.1.*",
