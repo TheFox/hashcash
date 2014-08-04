@@ -38,7 +38,7 @@ if($tests[0]){
 		pcntl_alarm(TIME_MAX);
 		$stamp = $hashcash->mint();
 		
-		fwrite(STDOUT, (time() - $start).'sec "'.$stamp.'"   '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, (time() - $start).'sec "'.$stamp.'"   '.$hashcash->getAttempts()."\n");
 		
 		if(!$stamp) break;
 	}
@@ -68,7 +68,7 @@ if($tests[1]){
 		$t = time() - $start;
 		$seconds[] = $t;
 		
-		fwrite(STDOUT, $t.'sec "'.$stamp.'"   '.$hashcash->getHash()."\n");
+		fwrite(STDOUT, $t.'sec "'.$stamp.'"   '.$hashcash->getAttempts()."\n");
 		#if($stamp) fwrite(STDOUT, $stamp."\n");
 		
 	}
