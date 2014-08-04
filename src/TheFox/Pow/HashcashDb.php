@@ -30,7 +30,9 @@ class HashcashDb extends YamlStorage{
 			$hashcashAr['id'] = $hashcashId;
 			$hashcashAr['stamp'] = $hashcash->getStamp();
 			
-			$this->data['hashcashs'][$hashcashId] = $hashcashAr;
+			if($hashcash->verify()){
+				$this->data['hashcashs'][$hashcashId] = $hashcashAr;
+			}
 		}
 		
 		$rv = parent::save();

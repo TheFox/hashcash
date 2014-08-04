@@ -299,8 +299,13 @@ class Hashcash{
 		$this->setSuffix($items[6]);
 	}
 	
-	public function verify($stamp){
-		$this->parseStamp($stamp);
+	public function verify($stamp = null){
+		if($stamp === null){
+			$stamp = $this->getStamp();
+		}
+		else{
+			$this->parseStamp($stamp);
+		}
 		
 		$verified = false;
 		
