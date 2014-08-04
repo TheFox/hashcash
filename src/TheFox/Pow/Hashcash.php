@@ -17,6 +17,8 @@ use TheFox\Utilities\Bin;
 class Hashcash{
 	
 	const DATE_FORMAT = 'ymd';
+	const DATE_FORMAT10 = 'ymdHi';
+	const DATE_FORMAT12 = 'ymdHis';
 	const EXPIRATION = 2419200; // 28 days
 	const MINT_ATTEMPTS_MAX = 10;
 	
