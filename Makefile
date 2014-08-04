@@ -1,5 +1,5 @@
 
-DELETE = rm -rf
+RM = rm -rf
 PHPCS = vendor/bin/phpcs
 PHPUNIT = vendor/bin/phpunit
 
@@ -25,8 +25,9 @@ test_phpcs: $(PHPCS) vendor/thefox/phpcsrs/Standards/TheFox
 
 test_phpunit: $(PHPUNIT) phpunit.xml
 	$(PHPUNIT)
+	$(RM) test_hashcashs*.yml
 
 clean:
-	$(DELETE) composer.lock composer.phar
-	$(DELETE) vendor/*
-	$(DELETE) vendor
+	$(RM) composer.lock composer.phar
+	$(RM) vendor/*
+	$(RM) vendor
