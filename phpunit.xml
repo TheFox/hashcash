@@ -21,6 +21,7 @@
 	
 	<testsuites>
 		<testsuite name="My Test Suite">
+			<file>tests/HashcashDbTest.php</file>
 			<file>tests/HashcashTest.php</file>
 		</testsuite>
 	</testsuites>
