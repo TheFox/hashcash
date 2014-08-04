@@ -56,6 +56,9 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('suffix1', $hashcash->getSuffix());
 	}
 	
+	/**
+	 * @group large
+	 */
 	public function testMint1(){
 		#$this->markTestIncomplete('This test has not been implemented yet.');
 		#$this->assertTrue(true); return;
