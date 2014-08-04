@@ -18,7 +18,7 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		#$this->markTestIncomplete('This test has not been implemented yet.');
 		
 		$this->assertTrue(in_array('sha1', hash_algos()), 'sha1 algorithm not found.');
-		$this->assertEquals('870226', date(Hashcash::DATE_FORMAT6, mktime(10, 2, 0, 2, 26, 1987)));
+		$this->assertEquals('870226', date(Hashcash::DATE_FORMAT, mktime(10, 2, 0, 2, 26, 1987)));
 		$this->assertEquals('8702240959', date(Hashcash::DATE_FORMAT10, mktime(9, 59, 24, 2, 24, 1987)));
 		$this->assertEquals('870221095824', date(Hashcash::DATE_FORMAT12, mktime(9, 58, 24, 2, 21, 1987)));
 	}

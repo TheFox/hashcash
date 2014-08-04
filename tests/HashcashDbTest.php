@@ -47,6 +47,9 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(1, count($db->getHashcashs()));
 	}
 	
+	/**
+	 * @group large
+	 */
 	public function testSave1(){
 		#fwrite(STDOUT, __METHOD__.''."\n");
 		$db = new HashcashDb('./test_hashcashs1.yml');
@@ -65,6 +68,7 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	/**
+	 * @group large
 	 * @depends testSave1
 	 */
 	public function testLoad1(){
@@ -110,6 +114,72 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 		
 		$db->setDataChanged(true);
 		#$db->save();
+	}
+	
+	public function testSave3(){
+		#fwrite(STDOUT, __METHOD__.''."\n");
+		$db = new HashcashDb('./test_hashcashs3.yml');
+		
+		$ts = time();
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setResource('res1');
+		$hashcash->mint();
+		$this->assertTrue($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setDate(date(Hashcash::DATE_FORMAT, $ts - 3600 * 24 * 90));
+		$hashcash->setResource('res2');
+		$hashcash->mint();
+		$this->assertFalse($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setDate(date(Hashcash::DATE_FORMAT, $ts - 3600 * 24 * 90));
+		$hashcash->setResource('res3');
+		$hashcash->setExpiration(3600 * 24 * 120);
+		$hashcash->mint();
+		$this->assertTrue($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setDate(date(Hashcash::DATE_FORMAT, $ts - 3600 * 24 * 10));
+		$hashcash->setResource('res4');
+		$hashcash->mint();
+		$this->assertTrue($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setDate(date('ymdHis', $ts - 60));
+		$hashcash->setResource('res5');
+		$hashcash->setExpiration(30);
+		$hashcash->mint();
+		$this->assertFalse($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(10);
+		$hashcash->setDate(date(Hashcash::DATE_FORMAT12, $ts - 60));
+		$hashcash->setResource('res6');
+		$hashcash->mint();
+		$this->assertTrue($hashcash->verify());
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		#fwrite(STDOUT, __METHOD__.': save '.$db->save()."\n");
+		$this->assertTrue($db->save() > 0);
+		$this->assertFileExists('./test_hashcashs3.yml');
 	}
 	
 }
