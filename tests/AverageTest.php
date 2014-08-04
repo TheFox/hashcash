@@ -8,7 +8,8 @@ use TheFox\Utilities\Hex;
 declare(ticks = 1);
 
 // Mac: 3.4gz
-const BITS = 12; // 35 sec
+//const BITS = 12; // 35 sec
+const BITS = 15; // 4:33 min
 const TESTS = 1000;
 const TIME_MAX = 30;
 
