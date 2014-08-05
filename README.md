@@ -1,10 +1,6 @@
 # Hashcash
 PHP implementation of [Hashcash](http://hashcash.org) 1.
 
-[![Latest Stable Version](https://poser.pugx.org/thefox/hashcash/v/stable.png)](https://packagist.org/packages/thefox/hashcash)
-[![Latest Unstable Version](https://poser.pugx.org/thefox/hashcash/v/unstable.png)](https://packagist.org/packages/thefox/hashcash)
-[![License](https://poser.pugx.org/thefox/hashcash/license.png)](https://packagist.org/packages/thefox/hashcash)
-
 ## Installation
 The preferred method of installation is via [Packagist](https://packagist.org/packages/thefox/hashcash) and [Composer](https://getcomposer.org/). Run the following command to install the package and add it as a requirement to composer.json:
 
