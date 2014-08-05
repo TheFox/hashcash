@@ -9,7 +9,7 @@ all: install tests
 install: composer.phar
 
 update: composer.phar
-	./composer.phar self-update
+	./composer.phar selfupdate
 	./composer.phar update
 
 composer.phar:
