@@ -2,19 +2,9 @@
 	"name": "thefox/hashcash",
 	"description": "Hashcash implementation in PHP.",
 	"type": "library",
-	"keywords": [
-		"proof-of-work",
-		"proofofwork",
-		"hashcash",
-		"hash",
-		"cash",
-		"sha1",
-		"pow",
-		"proof",
-		"work"
-	],
+	"keywords": [ "proof-of-work", "proofofwork", "hashcash", "hash", "cash", "sha1", "pow", "proof", "work" ],
 	"homepage": "http://fox21.at",
-	"license": "GPLv3",
+	"license": "GPL-3.0",
 	"authors": [
 		{
 			"name": "Christian Mayer",
