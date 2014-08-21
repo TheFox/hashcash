@@ -20,20 +20,20 @@ const TIME_MAX = 120;
 $next = false;
 $exit = false;
 
-function sig_next(){
+function sigNext(){
 	fwrite(STDOUT, 'next'."\n");
 }
 
-function sig_exit(){
+function sigExit(){
 	global $exit;
 	$exit = true;
 }
 
-$sig = pcntl_signal(SIGALRM, 'sig_next');
+$sig = pcntl_signal(SIGALRM, 'sigNext');
 print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
-$sig = pcntl_signal(SIGINT, 'sig_exit');
+$sig = pcntl_signal(SIGINT, 'sigExit');
 print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
-$sig = pcntl_signal(SIGTERM, 'sig_exit');
+$sig = pcntl_signal(SIGTERM, 'sigExit');
 print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
 
 fwrite(STDOUT, 'bits: '.BITS."\n");
