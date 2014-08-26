@@ -13,7 +13,7 @@ try{
 	print "stamp1: '".$hashcash->mint()."'\n";
 }
 catch(Exception $e){
-	print "ERROR 1: ".$e->getMessage()."\n";
+	print 'ERROR 1: '.$e->getMessage()."\n";
 }
 
 
@@ -25,7 +25,7 @@ try{
 	print "stamp2: '".$stamp."'\n";
 }
 catch(Exception $e){
-	print "ERROR 2: ".$e->getMessage()."\n";
+	print 'ERROR 2: '.$e->getMessage()."\n";
 }
 
 // Example 2b: verify a stamp (real world example)
@@ -34,7 +34,7 @@ try{
 	print "stamp2 verify: '".( $hashcash->verify($stamp) ? 'Ok' : 'failed' )."'\n";
 }
 catch(Exception $e){
-	print "ERROR 3: ".$e->getMessage()."\n";
+	print 'ERROR 3: '.$e->getMessage()."\n";
 }
 
 
@@ -47,7 +47,7 @@ try{
 	print "stamp3: '".$stamp."'\n";
 }
 catch(Exception $e){
-	print "ERROR 4: ".$e->getMessage()."\n";
+	print 'ERROR 4: '.$e->getMessage()."\n";
 }
 
 // Example 3b: verify a stamp, must fail
@@ -57,7 +57,7 @@ try{
 	print "stamp3 verify: '".( $hashcash->verify($stamp) ? 'Ok' : 'failed' )."' (must fail)\n";
 }
 catch(Exception $e){
-	print "ERROR 5: ".$e->getMessage()."\n";
+	print 'ERROR 5: '.$e->getMessage()."\n";
 }
 
 
@@ -70,7 +70,7 @@ try{
 	print "stamp4: '".$stamp."'\n";
 }
 catch(Exception $e){
-	print "ERROR 6: ".$e->getMessage()."\n";
+	print 'ERROR 6: '.$e->getMessage()."\n";
 }
 
 // Example 4a: verify a stamp, ignore expiration
@@ -80,7 +80,7 @@ try{
 	print "stamp4 verify: '".( $hashcash->verify($stamp) ? 'Ok' : 'failed' )."'\n";
 }
 catch(Exception $e){
-	print "ERROR 7: ".$e->getMessage()."\n";
+	print 'ERROR 7: '.$e->getMessage()."\n";
 }
 
 
@@ -95,7 +95,7 @@ try{
 	print "stamp5: '".$stamp."'\n";
 }
 catch(Exception $e){
-	print "ERROR 8: ".$e->getMessage()."\n";
+	print 'ERROR 8: '.$e->getMessage()."\n";
 }
 
 
@@ -110,7 +110,5 @@ try{
 	print "stamp6: '".$stamp."'\n";
 }
 catch(Exception $e){
-	print "ERROR 9: ".$e->getMessage()."\n";
+	print 'ERROR 9: '.$e->getMessage()."\n";
 }
-
-?>
