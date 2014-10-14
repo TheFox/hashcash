@@ -1,8 +1,11 @@
 
 RM = rm -rf
+CHMOD = chmod
 PHPCS = vendor/bin/phpcs
 PHPUNIT = vendor/bin/phpunit
 
+
+.PHONY: all install update tests test_phpcs test_phpunit clean
 
 all: install tests
 
@@ -14,6 +17,7 @@ update: composer.phar
 
 composer.phar:
 	curl -sS https://getcomposer.org/installer | php
+	$(CHMOD) 755 ./composer.phar
 	./composer.phar install
 
 $(PHPCS): composer.phar
