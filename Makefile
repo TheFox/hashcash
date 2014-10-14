@@ -10,6 +10,7 @@ PHPUNIT = vendor/bin/phpunit
 all: install tests
 
 install: composer.phar
+	./composer.phar install --prefer-source --no-interaction --dev
 
 update: composer.phar
 	./composer.phar selfupdate
@@ -18,7 +19,6 @@ update: composer.phar
 composer.phar:
 	curl -sS https://getcomposer.org/installer | php
 	$(CHMOD) 755 ./composer.phar
-	./composer.phar install
 
 $(PHPCS): composer.phar
 
