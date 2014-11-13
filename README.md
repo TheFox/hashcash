@@ -21,6 +21,7 @@ print "hashcash stamp: '".$hashcash->mint()."'\n";
 ## Links
 - [Packagist Package](https://packagist.org/packages/thefox/hashcash)
 - [Travis CI Repository](https://travis-ci.org/TheFox/hashcash)
+- [Coveralls Repository](https://coveralls.io/r/TheFox/hashcash)
 - [PHPWeekly - Issue June 5, 2014](http://phpweekly.com/archive/2014-06-05.html)
 
 ## Contribute

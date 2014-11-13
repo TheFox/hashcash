@@ -18,6 +18,7 @@
 		"symfony/yaml": "~2.5"
 	},
 	"require-dev": {
+		"satooshi/php-coveralls": "dev-master",
 		"phpunit/phpunit": "~4.1",
 		"thefox/phpcsrs": "~1.0"
 	},
