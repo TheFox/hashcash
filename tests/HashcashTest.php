@@ -141,22 +141,16 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$hashcash = new Hashcash();
 		$hashcash->setExpiration(0);
 		
-		fwrite(STDOUT, '.');
-		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2::ArrRIabEj3nZrOcM:0000000000007u1E') );
-		fwrite(STDOUT, '.');
-		$this->assertTrue(  $hashcash->verify('1:24:140422:mint2:ext1:Nde2ffWsRoe3DXVQ:00000001M+iu') );
-		fwrite(STDOUT, '.');
-		$this->assertTrue(  $hashcash->verify('1:20:140422:mint2:ext2:salt2:256507') );
-		fwrite(STDOUT, '.');
-		$this->assertTrue(  $hashcash->verify('1:28:140422:::s15xXleWocBKSA95Zw4e1Q==:245861178') );
-		fwrite(STDOUT, '.');
-		$this->assertTrue(  $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214') );
+		$this->assertTrue($hashcash->verify('1:20:140422:mint2::ArrRIabEj3nZrOcM:0000000000007u1E'));
+		$this->assertTrue($hashcash->verify('1:24:140422:mint2:ext1:Nde2ffWsRoe3DXVQ:00000001M+iu'));
+		$this->assertTrue($hashcash->verify('1:20:140422:mint2:ext2:salt2:256507'));
+		$this->assertTrue($hashcash->verify('1:28:140422:::s15xXleWocBKSA95Zw4e1Q==:245861178'));
+		$this->assertTrue($hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214'));
 		
-		fwrite(STDOUT, '.');
-		$this->assertFalse( $hashcash->verify('1:20:140422:mint3::ArrRIabEj3nZrOcM:0000000000007u1E') );
+		$this->assertFalse($hashcash->verify('1:20:140422:mint3::ArrRIabEj3nZrOcM:0000000000007u1E'));
 		
 		$hashcash->setExpiration(3600 * 24 * 365);
-		$this->assertFalse( $hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214') );
+		$this->assertFalse($hashcash->verify('1:21:870221:thefox::2B6kv/rFiCdJRzqhH7P2eA==:995214'));
 		
 		$hashcash1 = new Hashcash();
 		$hashcash1->setBits(10);
