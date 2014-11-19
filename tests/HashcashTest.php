@@ -4,15 +4,6 @@ use TheFox\Pow\Hashcash;
 
 class HashcashTest extends PHPUnit_Framework_TestCase{
 	
-	#protected static $cronjob = null;
-	
-	public static function setUpBeforeClass(){
-		#fwrite(STDOUT, __METHOD__.''."\n");
-		#$this->assertTrue(true);
-		#$this->assertFalse(false);
-		#$this->assertEquals();
-	}
-	
 	public function testBasic(){
 		#fwrite(STDOUT, __METHOD__.''."\n");
 		#$this->markTestIncomplete('This test has not been implemented yet.');
@@ -21,6 +12,53 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('870226', date(Hashcash::DATE_FORMAT, mktime(10, 2, 0, 2, 26, 1987)));
 		$this->assertEquals('8702240959', date(Hashcash::DATE_FORMAT10, mktime(9, 59, 24, 2, 24, 1987)));
 		$this->assertEquals('870221095824', date(Hashcash::DATE_FORMAT12, mktime(9, 58, 24, 2, 21, 1987)));
+	}
+	
+	/**
+	 * @expectedException RuntimeException
+	 * @expectedExceptionCode 1
+	 */
+	public function testSetVersionRuntimeException1(){
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(0);
+	}
+	
+	/**
+	 * @expectedException RuntimeException
+	 * @expectedExceptionCode 2
+	 */
+	public function testSetVersionRuntimeException2(){
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(9999);
+	}
+	
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testSetDateInvalidArgumentException(){
+		$hashcash = new Hashcash();
+		$hashcash->setDate('20140422');
+	}
+	
+	public function testSetAttempts(){
+		$hashcash = new Hashcash();
+		$this->assertEquals(0, $hashcash->getAttempts());
+		
+		$hashcash->setAttempts(10);
+		$this->assertEquals(10, $hashcash->getAttempts());
+	}
+	
+	public function testGetHash(){
+		$hashcash = new Hashcash();
+		$this->assertEquals('', $hashcash->getHash());
+		
+		$hashcash->setHash('xyz');
+		$this->assertEquals('xyz', $hashcash->getHash());
+	}
+	
+	public function testGetStamp(){
+		$hashcash = new Hashcash();
+		$this->assertEquals('1:20:'.date(Hashcash::DATE_FORMAT).'::::', $hashcash->getStamp());
 	}
 	
 	public function testSetGet1(){
@@ -123,6 +161,14 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('01d106345750ab94a8d80e1c0dbe0da3662d476e', $hashcash->getHash());
 	}
 	
+	public function testMintAll(){
+		$hashcash = new Hashcash(11);
+		$hashcash->setDate('141119');
+		
+		$stamps = $hashcash->mintAll();
+		$this->assertEquals(array('1:11:141119::::656', '1:11:141119::::1580'), $stamps);
+	}
+	
 	/**
 	 * @expectedException RuntimeException
 	 */
@@ -157,22 +203,6 @@ class HashcashTest extends PHPUnit_Framework_TestCase{
 		
 		$hashcash2 = new Hashcash();
 		$this->assertTrue($hashcash2->verify($hashcash1->mint()));
-	}
-	
-	/**
-	 * @expectedException RuntimeException
-	 */
-	public function testSetVersionRuntimeException(){
-		$hashcash = new Hashcash();
-		$hashcash->setVersion(0);
-	}
-	
-	/**
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testSetVersionInvalidArgumentException(){
-		$hashcash = new Hashcash();
-		$hashcash->setDate('20140422');
 	}
 	
 	/**

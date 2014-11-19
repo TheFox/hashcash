@@ -5,48 +5,6 @@ use TheFox\Pow\HashcashDb;
 
 class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	
-	public function testDoublespend1(){
-		#fwrite(STDOUT, __METHOD__."\n");
-		$db = new HashcashDb();
-		
-		$hashcash = new Hashcash();
-		$hashcash->setVersion(1);
-		$hashcash->setBits(5);
-		$hashcash->setResource('thefox');
-		$hashcash->setSuffix(1);
-		$this->assertTrue($db->addHashcash($hashcash));
-		
-		$hashcash = new Hashcash();
-		$hashcash->setVersion(1);
-		$hashcash->setBits(5);
-		$hashcash->setResource('thefox');
-		$hashcash->setSuffix(2);
-		$this->assertTrue($db->addHashcash($hashcash));
-		
-		$this->assertEquals(2, count($db->getHashcashs()));
-	}
-	
-	public function testDoublespend2(){
-		#fwrite(STDOUT, __METHOD__."\n");
-		$db = new HashcashDb();
-		
-		$hashcash = new Hashcash();
-		$hashcash->setVersion(1);
-		$hashcash->setBits(5);
-		$hashcash->setResource('thefox');
-		$hashcash->setSuffix(1);
-		$this->assertTrue($db->addHashcash($hashcash));
-		
-		$hashcash = new Hashcash();
-		$hashcash->setVersion(1);
-		$hashcash->setBits(5);
-		$hashcash->setResource('thefox');
-		$hashcash->setSuffix(1);
-		$this->assertFalse($db->addHashcash($hashcash));
-		
-		$this->assertEquals(1, count($db->getHashcashs()));
-	}
-	
 	/**
 	 * @group large
 	 */
@@ -181,5 +139,54 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($db->save() > 0);
 		$this->assertFileExists('test_data/test_hashcashs3.yml');
 	}
+	
+	public function testLoad4(){
+		$db = new HashcashDb('test_data/test_hashcashs4.yml');
+		$this->assertFalse($db->load());
+	}
+	
+	public function testDoublespend1(){
+		#fwrite(STDOUT, __METHOD__."\n");
+		$db = new HashcashDb();
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(5);
+		$hashcash->setResource('thefox');
+		$hashcash->setSuffix(1);
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(5);
+		$hashcash->setResource('thefox');
+		$hashcash->setSuffix(2);
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$this->assertEquals(2, count($db->getHashcashs()));
+	}
+	
+	public function testDoublespend2(){
+		#fwrite(STDOUT, __METHOD__."\n");
+		$db = new HashcashDb();
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(5);
+		$hashcash->setResource('thefox');
+		$hashcash->setSuffix(1);
+		$this->assertTrue($db->addHashcash($hashcash));
+		
+		$hashcash = new Hashcash();
+		$hashcash->setVersion(1);
+		$hashcash->setBits(5);
+		$hashcash->setResource('thefox');
+		$hashcash->setSuffix(1);
+		$this->assertFalse($db->addHashcash($hashcash));
+		
+		$this->assertEquals(1, count($db->getHashcashs()));
+	}
+	
+	
 	
 }

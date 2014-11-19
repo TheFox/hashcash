@@ -49,11 +49,11 @@ class Hashcash{
 	
 	public function setVersion($version){
 		if($version <= 0){
-			throw new RuntimeException('Version 0 not implemented yet.');
+			throw new RuntimeException('Version 0 not implemented yet.', 1);
 		}
 		elseif($version > 1){
 			throw new RuntimeException(
-				'Version '.$version.' not implemented yet.');
+				'Version '.$version.' not implemented yet.', 2);
 		}
 		
 		$this->version = (int)$version;
@@ -200,7 +200,7 @@ class Hashcash{
 				$testStamp = $attemptStamp.$round;
 				#$testStamp = $attemptStamp.base64_encode($round);
 				
-				#$bits = $this->checkBits(hash('sha1', $testStamp, true));
+				#$bits = $this->checkBitsSlow(hash('sha1', $testStamp, true));
 				#$found = $bits >= $this->getBits();
 				$found = $this->checkBitsFast(
 					substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
@@ -359,49 +359,29 @@ class Hashcash{
 		return $verified;
 	}
 	
-	private function checkBits($data){
-		#fwrite(STDOUT, __METHOD__.''."\n");
+	/**
+	 * @codeCoverageIgnore
+	 */
+	private function checkBitsSlow($data){
 		$bits = 0;
-		
-		#fwrite(STDOUT, "\n");
-		#Bin::debugData($data);
 		
 		$dataLen = strlen($data);
 		for($charn = 0; $charn < $dataLen; $charn++){
 			$char = ord($data[$charn]);
 			
-			#fwrite(STDOUT, "charn $charn: ".( sprintf('%d', $char) )."\n");
-			#fwrite(STDOUT, "\t\t ");
-			
 			if($char){
 				for($bit = 7; $bit >= 0; $bit--){
-					#fwrite(STDOUT, $bits.' ');
-					
 					if($char & (1 << $bit)){
 						break;
 					}
-					
 					$bits++;
 				}
-				#fwrite(STDOUT, ' - '.$bits.' ');
-				#fwrite(STDOUT, "\n");
 				break;
 			}
 			else{
 				$bits += 8;
-				
-				/*for($bit = 7; $bit >= 0; $bit--){
-					$bits++;
-					#fwrite(STDOUT, '{'.$bits.'} ');
-				}
-				*/
-				
-				#fwrite(STDOUT, ' - '.$bits.' ');
-				#fwrite(STDOUT, "\n");
 			}
 		}
-		
-		#fwrite(STDOUT, __METHOD__.' end: '.$bits."\n");
 		
 		return $bits;
 	}

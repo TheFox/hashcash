@@ -18,6 +18,7 @@
 		"symfony/yaml": "~2.5"
 	},
 	"require-dev": {
+		"doctrine/common": "~2.4",
 		"satooshi/php-coveralls": "dev-master",
 		"phpunit/phpunit": "~4.1",
 		"symfony/finder": "~2.5",
