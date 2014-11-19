@@ -16,6 +16,10 @@ use TheFox\Utilities\Bin;
 
 class Hashcash{
 	
+	const NAME = 'Hashcash';
+	const VERSION = '1.5.3-dev';
+	const RELEASE = 13;
+	
 	const DATE_FORMAT = 'ymd';
 	const DATE_FORMAT10 = 'ymdHi';
 	const DATE_FORMAT12 = 'ymdHis';
