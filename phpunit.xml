@@ -10,8 +10,8 @@
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	processIsolation="false"
-	stopOnError="false"
-	stopOnFailure="false"
+	stopOnError="true"
+	stopOnFailure="true"
 	stopOnIncomplete="false"
 	stopOnSkipped="false"
 	timeoutForSmallTests="1"
@@ -24,6 +24,7 @@
 		<testsuite name="My Test Suite">
 			<file>tests/HashcashDbTest.php</file>
 			<file>tests/HashcashTest.php</file>
+			<file>tests/YamlStorageTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>

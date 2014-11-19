@@ -20,6 +20,7 @@
 	"require-dev": {
 		"satooshi/php-coveralls": "dev-master",
 		"phpunit/phpunit": "~4.1",
+		"symfony/finder": "~2.5",
 		"thefox/phpcsrs": "~1.0"
 	},
 	"autoload": {
