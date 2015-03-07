@@ -21,9 +21,9 @@
 	
 	<testsuites>
 		<testsuite name="My Test Suite">
-			<file>tests/HashcashDbTest.php</file>
-			<file>tests/HashcashTest.php</file>
-			<file>tests/YamlStorageTest.php</file>
+			<file>tests/TheFox/Test/HashcashDbTest.php</file>
+			<file>tests/TheFox/Test/HashcashTest.php</file>
+			<file>tests/TheFox/Test/YamlStorageTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
