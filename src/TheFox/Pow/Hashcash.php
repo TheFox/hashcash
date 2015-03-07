@@ -17,7 +17,7 @@ use TheFox\Utilities\Bin;
 class Hashcash{
 	
 	const NAME = 'Hashcash';
-	const VERSION = '1.5.5';
+	const VERSION = '1.6.x-dev';
 	const RELEASE = 15;
 	
 	const DATE_FORMAT = 'ymd';
