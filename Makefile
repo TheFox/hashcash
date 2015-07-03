@@ -9,6 +9,8 @@ PHPCS_REPORT = --report=full --report-width=160
 PHPUNIT = vendor/bin/phpunit
 COMPOSER = ./composer.phar
 COMPOSER_DEV ?= 
+COMPOSER_INTERACTION ?= --no-interaction
+COMPOSER_PREFER_SOURCE ?= 
 
 
 .PHONY: all install update test test_phpcs test_phpunit test_phpunit_cc test_clean clean
@@ -42,7 +44,7 @@ clean:
 	$(RM) vendor
 
 $(VENDOR): $(COMPOSER)
-	$(COMPOSER) install $(COMPOSER_PREFER_SOURCE) --no-interaction $(COMPOSER_DEV)
+	$(COMPOSER) install $(COMPOSER_PREFER_SOURCE) $(COMPOSER_INTERACTION) $(COMPOSER_DEV)
 
 $(COMPOSER):
 	curl -sS https://getcomposer.org/installer | php
