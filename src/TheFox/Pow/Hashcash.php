@@ -17,7 +17,7 @@ use TheFox\Utilities\Bin;
 class Hashcash{
 	
 	const NAME = 'Hashcash';
-	const VERSION = '1.6.0-dev';
+	const VERSION = '1.6.0-dev.1';
 	const RELEASE = 15;
 	
 	const DATE_FORMAT = 'ymd';
@@ -359,9 +359,6 @@ class Hashcash{
 		return $verified;
 	}
 	
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function checkBitsSlow($data){
 		$bits = 0;
 		

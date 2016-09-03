@@ -5,46 +5,49 @@ MKDIR = mkdir -p
 VENDOR = vendor
 PHPCS = vendor/bin/phpcs
 PHPCS_STANDARD = vendor/thefox/phpcsrs/Standards/TheFox
-PHPCS_REPORT = --report=full --report-width=160
+PHPCS_OPTIONS = -v -s --colors --report=full --report-width=160 --standard=$(PHPCS_STANDARD)
 PHPUNIT = vendor/bin/phpunit
 COMPOSER = ./composer.phar
-COMPOSER_DEV ?= 
-COMPOSER_INTERACTION ?= --no-interaction
-COMPOSER_PREFER_SOURCE ?= 
+COMPOSER_OPTIONS ?= --no-interaction
 
 
-.PHONY: all install update test test_phpcs test_phpunit test_phpunit_cc test_clean clean
-
+.PHONY: all
 all: install test
 
+.PHONY: install
 install: $(VENDOR)
 
+.PHONY: update
 update: $(COMPOSER)
 	$(COMPOSER) selfupdate
 	$(COMPOSER) update
 
+.PHONY: test
 test: test_phpcs test_phpunit
 
-test_phpcs: $(PHPCS) vendor/thefox/phpcsrs/Standards/TheFox
-	$(PHPCS) -v -s $(PHPCS_REPORT) --standard=$(PHPCS_STANDARD) src tests *.php
+.PHONY: test_phpcs
+test_phpcs: $(PHPCS) $(PHPCS_STANDARD)
+	$(PHPCS) $(PHPCS_OPTIONS) src tests *.php
 
+.PHONY: test_phpunit
 test_phpunit: $(PHPUNIT) phpunit.xml test_data
-	TEST=true $(PHPUNIT) $(PHPUNIT_COVERAGE_HTML) $(PHPUNIT_COVERAGE_CLOVER)
+	$(PHPUNIT) $(PHPUNIT_OPTIONS)
 	$(MAKE) test_clean
 
+.PHONY: test_phpunit_cc
 test_phpunit_cc: build
-	$(MAKE) test_phpunit PHPUNIT_COVERAGE_HTML="--coverage-html build/report"
+	$(MAKE) test_phpunit PHPUNIT_OPTIONS="--coverage-html build/report"
 
+.PHONY: test_clean
 test_clean:
 	$(RM) test_data
 
+.PHONY: clean
 clean:
-	$(RM) composer.lock $(COMPOSER)
-	$(RM) vendor/*
-	$(RM) vendor
+	$(RM) composer.lock $(COMPOSER) $(VENDOR)
 
 $(VENDOR): $(COMPOSER)
-	$(COMPOSER) install $(COMPOSER_PREFER_SOURCE) $(COMPOSER_INTERACTION) $(COMPOSER_DEV)
+	$(COMPOSER) install $(COMPOSER_OPTIONS)
 
 $(COMPOSER):
 	curl -sS https://getcomposer.org/installer | php
@@ -58,6 +61,5 @@ test_data:
 	$(MKDIR) test_data
 
 build:
-	$(MKDIR) build
-	$(MKDIR) build/logs
-	$(CHMOD) u=rwx,go-rwx build
+	$(MKDIR) $@
+	$(CHMOD) u=rwx,go-rwx $@
