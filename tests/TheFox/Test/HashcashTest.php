@@ -3,13 +3,11 @@
 namespace TheFox\Test;
 
 use PHPUnit_Framework_TestCase;
-
 use TheFox\Pow\Hashcash;
 
 class HashcashTest extends PHPUnit_Framework_TestCase{
 	
 	public function testBasic(){
-		#fwrite(STDOUT, __METHOD__.''."\n");
 		#$this->markTestIncomplete('This test has not been implemented yet.');
 		
 		$this->assertTrue(in_array('sha1', hash_algos()), 'sha1 algorithm not found.');

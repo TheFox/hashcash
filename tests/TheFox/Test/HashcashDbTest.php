@@ -3,7 +3,6 @@
 namespace TheFox\Test;
 
 use PHPUnit_Framework_TestCase;
-
 use TheFox\Pow\Hashcash;
 use TheFox\Pow\HashcashDb;
 
@@ -13,7 +12,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	 * @group large
 	 */
 	public function testSave1(){
-		#fwrite(STDOUT, __METHOD__.''."\n");
 		$db = new HashcashDb('test_data/test_hashcashs1.yml');
 		
 		for($i = 0; $i < 1000; $i++){
@@ -40,7 +38,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	public function testSave2(){
-		#fwrite(STDOUT, __METHOD__.''."\n");
 		$db = new HashcashDb('test_data/test_hashcashs2.yml');
 		
 		#$ts = mktime(0, 0, 0, date('d'), date('m'), date('Y'));
@@ -79,7 +76,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	public function testSave3(){
-		#fwrite(STDOUT, __METHOD__.''."\n");
 		$db = new HashcashDb('test_data/test_hashcashs3.yml');
 		
 		$ts = time();
@@ -139,7 +135,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($hashcash->verify());
 		$this->assertTrue($db->addHashcash($hashcash));
 		
-		#fwrite(STDOUT, __METHOD__.': save '.$db->save()."\n");
 		$this->assertTrue($db->save() > 0);
 		$this->assertFileExists('test_data/test_hashcashs3.yml');
 	}
@@ -150,7 +145,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	public function testDoublespend1(){
-		#fwrite(STDOUT, __METHOD__."\n");
 		$db = new HashcashDb();
 		
 		$hashcash = new Hashcash();
@@ -171,7 +165,6 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase{
 	}
 	
 	public function testDoublespend2(){
-		#fwrite(STDOUT, __METHOD__."\n");
 		$db = new HashcashDb();
 		
 		$hashcash = new Hashcash();

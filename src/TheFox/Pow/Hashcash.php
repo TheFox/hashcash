@@ -7,18 +7,16 @@
 
 namespace TheFox\Pow;
 
+use DateTime;
 use RuntimeException;
 use InvalidArgumentException;
-use DateTime;
-
 use TheFox\Utilities\Rand;
 use TheFox\Utilities\Bin;
 
 class Hashcash{
 	
 	const NAME = 'Hashcash';
-	const VERSION = '1.6.0';
-	const RELEASE = 16;
+	const VERSION = '1.7.0-dev';
 	
 	const DATE_FORMAT = 'ymd';
 	const DATE_FORMAT10 = 'ymdHi';
@@ -26,6 +24,9 @@ class Hashcash{
 	const EXPIRATION = 2419200; // 28 days
 	const MINT_ATTEMPTS_MAX = 10;
 	
+	/**
+	 * @var integer
+	 */
 	private $version = 1;
 	private $bits;
 	private $date;
@@ -39,6 +40,10 @@ class Hashcash{
 	private $mintAttemptsMax;
 	private $stamp = '';
 	
+	/**
+	 * @param integer $bits
+	 * @param string $resource
+	 */
 	public function __construct($bits = 20, $resource = ''){
 		$this->setBits($bits);
 		$this->setDate(date(static::DATE_FORMAT));
@@ -47,6 +52,9 @@ class Hashcash{
 		$this->setMintAttemptsMax(static::MINT_ATTEMPTS_MAX);
 	}
 	
+	/**
+	 * @param integer $version
+	 */
 	public function setVersion($version){
 		if($version <= 0){
 			throw new RuntimeException('Version 0 not implemented yet.', 1);
@@ -56,21 +64,33 @@ class Hashcash{
 				'Version '.$version.' not implemented yet.', 2);
 		}
 		
-		$this->version = (int)$version;
+		$this->version = $version;
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function getVersion(){
-		return (int)$this->version;
+		return $this->version;
 	}
 	
+	/**
+	 * @param integer $bits
+	 */
 	public function setBits($bits){
-		$this->bits = (int)$bits;
+		$this->bits = $bits;
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function getBits(){
-		return (int)$this->bits;
+		return $this->bits;
 	}
 	
+	/**
+	 * @param string $date
+	 */
 	public function setDate($date){
 		$dateLen = strlen($date);
 		if($dateLen != 6 && $dateLen != 10 && $dateLen != 12){
@@ -153,6 +173,9 @@ class Hashcash{
 		$this->stamp = $stamp;
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function getStamp(){
 		if(!$this->stamp){
 			$stamp = $this->getVersion().':'.$this->getBits();
@@ -166,7 +189,6 @@ class Hashcash{
 	}
 	
 	public function mint(){
-		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamp = '';
 		
 		$rounds = pow(2, $this->getBits());
@@ -191,30 +213,13 @@ class Hashcash{
 			$attemptSalts[] = $salt;
 			$attemptStamp = $baseStamp.$salt.':';
 			
-			#fwrite(STDOUT, 'attempt: '.$attempt.'/'.$this->getMintAttemptsMax()."\n");
-			#fwrite(STDOUT, "\t".' bits: '.$this->getBits()."\n");
-			#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
-			#fwrite(STDOUT, "\t".' attemptStamp: '.$attemptStamp."\n");
-			
 			for($round = 0; $round < $rounds; $round++){
 				$testStamp = $attemptStamp.$round;
-				#$testStamp = $attemptStamp.base64_encode($round);
 				
-				#$bits = $this->checkBitsSlow(hash('sha1', $testStamp, true));
-				#$found = $bits >= $this->getBits();
 				$found = $this->checkBitsFast(
 					substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 				
-				#$percent = sprintf('%.4f', $round / $rounds * 100).' %';
-				#$hash = hash('sha1', $testStamp);
-				#if($round % 100 == 0 && $bits >= 10 || $found)
-				#fwrite(STDOUT, ' round '.$round.' '.$percent.' - '.$bits.'>='.$this->getBits().', '.$hash."\n");
-				#if($round % 100 == 0 || $found)
-				#fwrite(STDOUT, ' round '.$round.' '.$percent.' - '.$hash."\n");
-				
 				if($found){
-					#Bin::debugData(hash('sha1', $testStamp, true));
-					
 					break;
 				}
 			}
@@ -246,7 +251,6 @@ class Hashcash{
 	}
 	
 	public function mintAll(){
-		#fwrite(STDOUT, __METHOD__.': '.$this->getBits()."\n");
 		$stamps = array();
 		
 		$rounds = pow(2, $this->getBits());
@@ -257,24 +261,13 @@ class Hashcash{
 		$baseStamp .= ':'.$this->getDate();
 		$baseStamp .= ':'.$this->getResource().':'.$this->getExtension().':'.$salt.':';
 		
-		#fwrite(STDOUT, __METHOD__.': '.$this->getBits().', '.$bytes."\n");
-		
 		if(!$salt){
 			$salt = base64_encode(Rand::data(16));
 		}
 		
-		#fwrite(STDOUT, 'bits: '.$this->getBits()."\n");
-		#fwrite(STDOUT, "\t".' rounds: '.$rounds."\n");
-		#fwrite(STDOUT, "\t".' baseStamp: '.$baseStamp."\n");
-		
 		for($round = 0; $round < $rounds; $round++){
 			$testStamp = $baseStamp.$round;
 			$found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
-			
-			#$percent = sprintf('%.4f', $round / $rounds * 100).' %';
-			#if($round % 1000000 == 0 || $found)
-			#if($found)
-			#fwrite(STDOUT, "\t".' round '.$round.' '.$percent.' - '.hash('sha1', $testStamp)."\n");
 			
 			if($found){
 				$stamps[] = $testStamp;
@@ -303,6 +296,10 @@ class Hashcash{
 		$this->setSuffix($items[6]);
 	}
 	
+	/**
+	 * @param string|null $stamp
+	 * @return boolean
+	 */
 	public function verify($stamp = null){
 		if($stamp === null){
 			$stamp = $this->getStamp();
@@ -337,24 +334,13 @@ class Hashcash{
 					$day = substr($this->getDate(), 4, 2);
 			}
 			
-			#fwrite(STDOUT, __METHOD__.' date: '.$year.', '.$month.', '.$day.' - '.$hour.':'.$minute.':'.$second."\n");
-			
 			$date = new DateTime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 			$now = new DateTime('now');
-			
-			#var_export($date);
-			#var_export($now);
 			
 			if($date->getTimestamp() < $now->getTimestamp() - $this->getExpiration()){
 				$verified = false;
 			}
-			
-			#fwrite(STDOUT, __METHOD__.' date: '.$date->getTimestamp()."\n");
-			#fwrite(STDOUT, __METHOD__.' now:  '.$now->getTimestamp()."\n");
-			#fwrite(STDOUT, __METHOD__.' exp:  '.($now->getTimestamp() - $this->getExpiration()).' '.(int)$verified."\n");
 		}
-		
-		#fwrite(STDOUT, __METHOD__.' bits: '.$bits.'>='.$this->getBits().', '.(int)$verified."\n");
 		
 		return $verified;
 	}
@@ -384,8 +370,6 @@ class Hashcash{
 	}
 	
 	private function checkBitsFast($data, $bytes, $bits){
-		#fwrite(STDOUT, __METHOD__.': '.$bytes.', '.$bits.''."\n");
-		
 		$last = $bytes - 1;
 		
 		if(substr($data, 0, $last) == str_repeat("\x00", $last) && 

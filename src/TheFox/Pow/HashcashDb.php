@@ -2,10 +2,6 @@
 
 namespace TheFox\Pow;
 
-#use RuntimeException;
-#use InvalidArgumentException;
-#use DateTime;
-
 use TheFox\Storage\YamlStorage;
 
 class HashcashDb extends YamlStorage{
@@ -20,12 +16,8 @@ class HashcashDb extends YamlStorage{
 	}
 	
 	public function save(){
-		#fwrite(STDOUT, __CLASS__.'->'.__FUNCTION__.''."\n");
-		
 		$this->data['hashcashs'] = array();
 		foreach($this->hashcashs as $hashcashId => $hashcash){
-			#fwrite(STDOUT, __CLASS__.'->'.__FUNCTION__.': '.$hashcashId."\n");
-			
 			$hashcashAr = array();
 			$hashcashAr['id'] = $hashcashId;
 			$hashcashAr['stamp'] = $hashcash->getStamp();
@@ -42,13 +34,10 @@ class HashcashDb extends YamlStorage{
 	}
 	
 	public function load(){
-		#fwrite(STDOUT, __CLASS__.'->'.__FUNCTION__.''."\n");
-		
 		if(parent::load()){
 			if(isset($this->data['hashcashs']) && $this->data['hashcashs']){
 				foreach($this->data['hashcashs'] as $hashcashId => $hashcashAr){
 					$this->hashcashsId = $hashcashId;
-					#fwrite(STDOUT, __CLASS__.'->'.__FUNCTION__.': '.$this->hashcashsId."\n");
 					
 					$hashcash = new Hashcash();
 					if($hashcash->verify($hashcashAr['stamp'])){

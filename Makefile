@@ -31,7 +31,7 @@ test: test_phpcs test_phpunit
 
 .PHONY: test_phpstan
 test_phpstan:
-	$(PHPSTAN) analyse --level 5 --no-progress src tests
+	$(PHPSTAN) analyse --level 5 --no-progress --configuration phpstan.neon --autoload-file vendor/autoload.php src tests
 
 .PHONY: test_phpcs
 test_phpcs: $(PHPCS) $(PHPCS_STANDARD)
