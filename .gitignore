@@ -1,6 +1,7 @@
-vendor
-build
+/vendor/
+/build/
 composer.lock
 composer.phar
 *.yml
 !.travis.yml
+/.idea/

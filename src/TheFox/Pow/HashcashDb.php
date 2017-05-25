@@ -14,13 +14,13 @@ class HashcashDb extends YamlStorage
     /**
      * @var array
      */
-    private $hashcashs = array();
+    private $hashcashs = [];
 
     /**
      * HashcashDb constructor.
-     * @param null $filePath
+     * @param string $filePath
      */
-    public function __construct($filePath = null)
+    public function __construct(string $filePath = '')
     {
         parent::__construct($filePath);
 
@@ -28,13 +28,13 @@ class HashcashDb extends YamlStorage
     }
 
     /**
-     * @return bool|int
+     * @return bool
      */
-    public function save()
+    public function save(): bool
     {
-        $this->data['hashcashs'] = array();
+        $this->data['hashcashs'] = [];
         foreach ($this->hashcashs as $hashcashId => $hashcash) {
-            $hashcashAr = array();
+            $hashcashAr = [];
             $hashcashAr['id'] = $hashcashId;
             $hashcashAr['stamp'] = $hashcash->getStamp();
 
@@ -52,7 +52,7 @@ class HashcashDb extends YamlStorage
     /**
      * @return bool
      */
-    public function load()
+    public function load(): bool
     {
         if (parent::load()) {
             if (isset($this->data['hashcashs']) && $this->data['hashcashs']) {
@@ -77,7 +77,7 @@ class HashcashDb extends YamlStorage
      * @param Hashcash $hashcash
      * @return bool
      */
-    public function hasDoublespend(Hashcash $hashcash)
+    public function hasDoublespend(Hashcash $hashcash): bool
     {
         return in_array($hashcash, $this->hashcashs);
     }
@@ -86,7 +86,7 @@ class HashcashDb extends YamlStorage
      * @param Hashcash $hashcash
      * @return bool
      */
-    public function addHashcash(Hashcash $hashcash)
+    public function addHashcash(Hashcash $hashcash): bool
     {
         if (!$this->hasDoublespend($hashcash)) {
             $this->hashcashsId++;
@@ -102,7 +102,7 @@ class HashcashDb extends YamlStorage
     /**
      * @return array
      */
-    public function getHashcashs()
+    public function getHashcashs(): array
     {
         return $this->hashcashs;
     }

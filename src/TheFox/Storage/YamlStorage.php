@@ -35,23 +35,22 @@ class YamlStorage
      * YamlStorage constructor.
      * @param null $filePath
      */
-    public function __construct($filePath = null)
+    public function __construct(string $filePath = '')
     {
-        if ($filePath !== null) {
-            $this->setFilePath($filePath);
-        }
+        $this->datadirBasePath = '';
+        $this->filePath = $filePath;
     }
 
     /**
      * @return bool
      */
-    public function save()
+    public function save(): bool
     {
         $rv = false;
 
         if ($this->dataChanged) {
             if ($this->getFilePath()) {
-                $rv = file_put_contents($this->getFilePath(), Yaml::dump($this->data));
+                $rv = file_put_contents($this->getFilePath(), Yaml::dump($this->data)) !== false;
             }
             if ($rv) {
                 $this->setDataChanged(false);
@@ -62,13 +61,14 @@ class YamlStorage
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function load()
+    public function load(): bool
     {
         if ($this->getFilePath()) {
             if (file_exists($this->getFilePath())) {
                 $this->data = Yaml::parse($this->getFilePath());
+
                 return $this->isLoaded(true);
             }
         }
@@ -77,58 +77,56 @@ class YamlStorage
     }
 
     /**
+     * Is Getter and Setter.
+     *
      * @param null $isLoaded
-     * @return bool|null
+     * @return bool
      */
-    public function isLoaded($isLoaded = null)
+    public function isLoaded($isLoaded = null): bool
     {
         if ($isLoaded !== null) {
             $this->isLoaded = $isLoaded;
         }
 
-        return $this->isLoaded;
+        return (bool)$this->isLoaded;
     }
 
     /**
-     * @param $filePath
+     * @param string $filePath
      */
-    public function setFilePath($filePath)
+    public function setFilePath(string $filePath)
     {
         $this->filePath = $filePath;
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->filePath;
     }
 
     /**
-     * @param $datadirBasePath
+     * @param string $datadirBasePath
      */
-    public function setDatadirBasePath($datadirBasePath)
+    public function setDatadirBasePath(string $datadirBasePath)
     {
         $this->datadirBasePath = $datadirBasePath;
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getDatadirBasePath()
+    public function getDatadirBasePath(): string
     {
-        if ($this->datadirBasePath) {
-            return $this->datadirBasePath;
-        }
-
-        return null;
+        return $this->datadirBasePath;
     }
 
     /**
      * @param bool $changed
      */
-    public function setDataChanged($changed = true)
+    public function setDataChanged(bool $changed = true)
     {
         $this->dataChanged = $changed;
     }
@@ -136,7 +134,7 @@ class YamlStorage
     /**
      * @return bool
      */
-    public function getDataChanged()
+    public function getDataChanged(): bool
     {
         return $this->dataChanged;
     }

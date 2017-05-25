@@ -18,7 +18,7 @@ class YamlStorageTest extends PHPUnit_Framework_TestCase
     public function testSave()
     {
         $storage = new YamlStorage('test_data/test1.yml');
-        $storage->data['test'] = array('test1' => 123, 'test2' => 'test3');
+        $storage->data['test'] = ['test1' => 123, 'test2' => 'test3'];
 
         $this->assertFalse($storage->getDataChanged());
 
@@ -67,7 +67,7 @@ class YamlStorageTest extends PHPUnit_Framework_TestCase
     public function testSetDatadirBasePath()
     {
         $storage = new YamlStorage();
-        $this->assertEquals(null, $storage->getDatadirBasePath());
+        $this->assertEquals('', $storage->getDatadirBasePath());
 
         $storage->setDatadirBasePath('test_data');
 

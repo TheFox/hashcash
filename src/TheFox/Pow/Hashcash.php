@@ -88,7 +88,7 @@ class Hashcash
      * @param integer $bits
      * @param string $resource
      */
-    public function __construct($bits = 20, $resource = '')
+    public function __construct(int $bits = 20, string $resource = '')
     {
         $this->setBits($bits);
         $this->setDate(date(static::DATE_FORMAT));
@@ -332,7 +332,7 @@ class Hashcash
         $round = 0;
         $testStamp = '';
         //$bits = 0;
-        $attemptSalts = array();
+        $attemptSalts = [];
         $attempt = 0;
         for (; ($attempt < $this->getMintAttemptsMax() || !$this->getMintAttemptsMax()) && !$found; $attempt++) {
             $attemptSalts[] = $salt;
@@ -379,20 +379,20 @@ class Hashcash
      */
     public function mintAll()
     {
-        $stamps = array();
+        $stamps = [];
 
         $rounds = pow(2, $this->getBits());
         $bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+        
         $salt = $this->getSalt();
-
-        $baseStamp = $this->getVersion() . ':' . $this->getBits();
-        $baseStamp .= ':' . $this->getDate();
-        $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':' . $salt . ':';
-
         if (!$salt) {
             $salt = base64_encode(Rand::data(16));
         }
 
+        $baseStamp = $this->getVersion() . ':' . $this->getBits();
+        $baseStamp .= ':' . $this->getDate();
+        $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':' . $salt . ':';
+        
         for ($round = 0; $round < $rounds; $round++) {
             $testStamp = $baseStamp . $round;
             $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
