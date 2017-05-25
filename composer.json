@@ -13,7 +13,7 @@
 		}
 	],
 	"require": {
-		"php": "^5.3 || ^7.0",
+		"php": "^7.0",
 		"thefox/utilities": "^1.1",
 		"symfony/yaml": "^2.5"
 	},

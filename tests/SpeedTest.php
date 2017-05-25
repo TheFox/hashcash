@@ -10,7 +10,7 @@ declare(ticks=1);
 
 const TIME_MAX = 30;
 
-$tests = array(1, 0);
+$tests = [1, 0];
 
 
 $exit = false;
@@ -50,7 +50,7 @@ if ($tests[1]) {
     $bits = 20;
     $loops = 100;
 
-    $seconds = array();
+    $seconds = [];
     for ($n = 0; $n < $loops; $n++) {
         $hashcash = new Hashcash($bits, 'example@example.com');
         $stamp = '';

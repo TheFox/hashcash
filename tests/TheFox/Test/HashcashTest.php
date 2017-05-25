@@ -185,7 +185,10 @@ class HashcashTest extends PHPUnit_Framework_TestCase
         $hashcash->setDate('141119');
 
         $stamps = $hashcash->mintAll();
-        $this->assertEquals(array('1:11:141119::::656', '1:11:141119::::1580'), $stamps);
+        $this->assertEquals([
+            '1:11:141119::::656',
+            '1:11:141119::::1580',
+        ], $stamps);
     }
 
     /**

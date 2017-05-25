@@ -27,15 +27,11 @@ update: $(COMPOSER)
 	$(COMPOSER) update
 
 .PHONY: test
-test: test_phpcs test_phpunit
+test: test_phpunit
 
 .PHONY: test_phpstan
 test_phpstan:
 	$(PHPSTAN) analyse --level 5 --no-progress --configuration phpstan.neon --autoload-file vendor/autoload.php src tests
-
-.PHONY: test_phpcs
-test_phpcs: $(PHPCS)
-	$(PHPCS) src tests *.php
 
 .PHONY: test_phpunit
 test_phpunit: $(PHPUNIT) phpunit.xml test_data

@@ -381,21 +381,22 @@ class Hashcash
     {
         $stamps = [];
 
-        $rounds = pow(2, $this->getBits());
-        $bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+        $bits = $this->getBits();
+        $rounds = pow(2, $bits);
+        $bytes = $bits / 8 + (8 - ($bits % 8)) / 8;
         
         $salt = $this->getSalt();
-        if (!$salt) {
+        /*if (!$salt) {
             $salt = base64_encode(Rand::data(16));
-        }
+        }*/
 
-        $baseStamp = $this->getVersion() . ':' . $this->getBits();
+        $baseStamp = $this->getVersion() . ':' . $bits;
         $baseStamp .= ':' . $this->getDate();
         $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':' . $salt . ':';
         
         for ($round = 0; $round < $rounds; $round++) {
             $testStamp = $baseStamp . $round;
-            $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+            $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $bits);
 
             if ($found) {
                 $stamps[] = $testStamp;
