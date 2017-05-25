@@ -36,7 +36,6 @@ test_phpstan:
 .PHONY: test_phpunit
 test_phpunit: $(PHPUNIT) phpunit.xml test_data
 	$(PHPUNIT) $(PHPUNIT_OPTIONS)
-	$(MAKE) test_clean
 
 .PHONY: test_phpunit_cc
 test_phpunit_cc: build

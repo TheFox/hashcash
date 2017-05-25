@@ -13,7 +13,10 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
      */
     public function testSave1()
     {
-        $db = new HashcashDb('test_data/test_hashcashs1.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs1.yml';
+
+        $db = new HashcashDb($path);
 
         for ($i = 0; $i < 1000; $i++) {
             $hashcash = new Hashcash();
@@ -25,7 +28,7 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($db->save() > 0);
-        $this->assertFileExists('test_data/test_hashcashs1.yml');
+        $this->assertFileExists($path);
     }
 
     /**
@@ -34,14 +37,20 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad1()
     {
-        $db = new HashcashDb('test_data/test_hashcashs1.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs1.yml';
+
+        $db = new HashcashDb($path);
         $this->assertTrue($db->load());
         $this->assertEquals(1000, count($db->getHashcashs()));
     }
 
     public function testSave2()
     {
-        $db = new HashcashDb('test_data/test_hashcashs2.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs2.yml';
+
+        $db = new HashcashDb($path);
 
         //$ts = mktime(0, 0, 0, date('d'), date('m'), date('Y'));
         $ts = time();
@@ -63,7 +72,7 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
         $db->addHashcash($hashcash);
 
         $this->assertTrue($db->save() > 0);
-        $this->assertFileExists('test_data/test_hashcashs2.yml');
+        $this->assertFileExists($path);
     }
 
     /**
@@ -71,7 +80,10 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad2()
     {
-        $db = new HashcashDb('test_data/test_hashcashs2.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs2.yml';
+
+        $db = new HashcashDb($path);
         $this->assertTrue($db->load());
         $this->assertEquals(1, count($db->getHashcashs()));
 
@@ -81,7 +93,10 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
 
     public function testSave3()
     {
-        $db = new HashcashDb('test_data/test_hashcashs3.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs3.yml';
+
+        $db = new HashcashDb($path);
 
         $ts = time();
 
@@ -141,12 +156,15 @@ class HashcashDbTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($db->addHashcash($hashcash));
 
         $this->assertTrue($db->save() > 0);
-        $this->assertFileExists('test_data/test_hashcashs3.yml');
+        $this->assertFileExists($path);
     }
 
     public function testLoad4()
     {
-        $db = new HashcashDb('test_data/test_hashcashs4.yml');
+        $basePath = realpath(dirname(__FILE__).'/../../..');
+        $path = $basePath.'/test_data/test_hashcashs4.yml';
+
+        $db = new HashcashDb($path);
         $this->assertFalse($db->load());
     }
 
