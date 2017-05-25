@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 use TheFox\Pow\Hashcash;
 use TheFox\Utilities\Hex;
 
-declare(ticks = 1);
+declare(ticks=1);
 
 // Mac: 3.4gz
 //const BITS = 12; // 35 sec (avg: 0.036 seconds)
@@ -20,55 +20,59 @@ const TIME_MAX = 120;
 $next = false;
 $exit = false;
 
-function sigNext(){
-	fwrite(STDOUT, 'next'."\n");
+function sigNext()
+{
+    fwrite(STDOUT, 'next' . "\n");
 }
 
-function sigExit(){
-	global $exit;
-	$exit = true;
+function sigExit()
+{
+    global $exit;
+    $exit = true;
 }
 
 $sig = pcntl_signal(SIGALRM, 'sigNext');
-print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
-$sig = pcntl_signal(SIGINT, 'sigExit');
-print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
-$sig = pcntl_signal(SIGTERM, 'sigExit');
-print 'signal setup: '.($sig ? 'ok' : 'failed')."\n";
+print 'signal setup: ' . ($sig ? 'ok' : 'failed') . "\n";
 
-fwrite(STDOUT, 'bits: '.BITS."\n");
-fwrite(STDOUT, 'tests: '.TESTS."\n");
+$sig = pcntl_signal(SIGINT, 'sigExit');
+print 'signal setup: ' . ($sig ? 'ok' : 'failed') . "\n";
+
+$sig = pcntl_signal(SIGTERM, 'sigExit');
+print 'signal setup: ' . ($sig ? 'ok' : 'failed') . "\n";
+
+fwrite(STDOUT, 'bits: ' . BITS . "\n");
+fwrite(STDOUT, 'tests: ' . TESTS . "\n");
 
 $diffMin = TIME_MAX;
 $diffMax = 0;
-for($testno = 1; $testno <= TESTS && !$exit; $testno++){
-	$hashcash = new Hashcash(BITS, 'example@example.com');
-	$stamp = '';
-	
-	$start = time();
-	fwrite(STDOUT, 'mint '.$testno.'/'.TESTS.': ');
-	
-	pcntl_alarm(TIME_MAX);
-	$stamp = $hashcash->mint();
-	pcntl_alarm(null);
-	
-	$diff = time() - $start;
-	if($diff > $diffMax){
-		$diffMax = $diff;
-	}
-	if($diff < $diffMin){
-		$diffMin = $diff;
-	}
-	
-	fwrite(STDOUT, $diff.' sec "'.$stamp.'"   '.$hashcash->getAttempts()."\n");
-	
-	$times[] = $diff;
-	
-	if(!$stamp) break;
+for ($testno = 1; $testno <= TESTS && !$exit; $testno++) {
+    $hashcash = new Hashcash(BITS, 'example@example.com');
+    $stamp = '';
+
+    $start = time();
+    fwrite(STDOUT, 'mint ' . $testno . '/' . TESTS . ': ');
+
+    pcntl_alarm(TIME_MAX);
+    $stamp = $hashcash->mint();
+    pcntl_alarm(null);
+
+    $diff = time() - $start;
+    if ($diff > $diffMax) {
+        $diffMax = $diff;
+    }
+    if ($diff < $diffMin) {
+        $diffMin = $diff;
+    }
+
+    fwrite(STDOUT, $diff . ' sec "' . $stamp . '"   ' . $hashcash->getAttempts() . "\n");
+
+    $times[] = $diff;
+
+    if (!$stamp) break;
 }
 
-fwrite(STDOUT, 'bits: '.BITS."\n");
-fwrite(STDOUT, 'tests: '.TESTS."\n");
-fwrite(STDOUT, 'min: '.$diffMin.' seconds'."\n");
-fwrite(STDOUT, 'max: '.$diffMax.' seconds'."\n");
-fwrite(STDOUT, 'avg: '.(array_sum($times) / TESTS).' seconds'."\n");
+fwrite(STDOUT, 'bits: ' . BITS . "\n");
+fwrite(STDOUT, 'tests: ' . TESTS . "\n");
+fwrite(STDOUT, 'min: ' . $diffMin . ' seconds' . "\n");
+fwrite(STDOUT, 'max: ' . $diffMax . ' seconds' . "\n");
+fwrite(STDOUT, 'avg: ' . (array_sum($times) / TESTS) . ' seconds' . "\n");
