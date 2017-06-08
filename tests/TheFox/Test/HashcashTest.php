@@ -2,10 +2,10 @@
 
 namespace TheFox\Test;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use TheFox\Pow\Hashcash;
 
-class HashcashTest extends PHPUnit_Framework_TestCase
+class HashcashTest extends TestCase
 {
     public function testBasic()
     {

@@ -2,11 +2,11 @@
 
 namespace TheFox\Test;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use TheFox\Pow\Hashcash;
 use TheFox\Pow\HashcashDb;
 
-class HashcashDbTest extends PHPUnit_Framework_TestCase
+class HashcashDbTest extends TestCase
 {
     /**
      * @group large
