@@ -14,7 +14,7 @@ class HashcashDbTest extends TestCase
     public function testSave1()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs1.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs1.yml';
 
         $db = new HashcashDb($path);
 
@@ -38,7 +38,7 @@ class HashcashDbTest extends TestCase
     public function testLoad1()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs1.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs1.yml';
 
         $db = new HashcashDb($path);
         $this->assertTrue($db->load());
@@ -48,7 +48,7 @@ class HashcashDbTest extends TestCase
     public function testSave2()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs2.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs2.yml';
 
         $db = new HashcashDb($path);
 
@@ -81,7 +81,7 @@ class HashcashDbTest extends TestCase
     public function testLoad2()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs2.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs2.yml';
 
         $db = new HashcashDb($path);
         $this->assertTrue($db->load());
@@ -94,7 +94,7 @@ class HashcashDbTest extends TestCase
     public function testSave3()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs3.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs3.yml';
 
         $db = new HashcashDb($path);
 
@@ -162,7 +162,7 @@ class HashcashDbTest extends TestCase
     public function testLoad4()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test_hashcashs4.yml';
+        $path = $basePath.'/tmp/test_data/test_hashcashs4.yml';
 
         $db = new HashcashDb($path);
         $this->assertFalse($db->load());

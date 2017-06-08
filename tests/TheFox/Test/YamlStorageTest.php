@@ -18,7 +18,7 @@ class YamlStorageTest extends TestCase
     public function testSave()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test1.yml';
+        $path = $basePath.'/tmp/test_data/test1.yml';
 
         $storage = new YamlStorage($path);
         $storage->data['test'] = ['test1' => 123, 'test2' => 'test3'];
@@ -33,7 +33,7 @@ class YamlStorageTest extends TestCase
         $finder = new Finder();
         $files = $finder
             //->path($basePath)
-            ->in($basePath.'/test_data')
+            ->in($basePath.'/tmp/test_data')
             ->name('test1.yml');
         $this->assertEquals(1, count($files));
     }
@@ -41,7 +41,7 @@ class YamlStorageTest extends TestCase
     public function testLoad1()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test1.yml';
+        $path = $basePath.'/tmp/test_data/test1.yml';
 
         $storage = new YamlStorage($path);
         $storage->setDataChanged();
@@ -56,7 +56,7 @@ class YamlStorageTest extends TestCase
     public function testLoad2()
     {
         $basePath = realpath(dirname(__FILE__).'/../../..');
-        $path = $basePath.'/test_data/test2.yml';
+        $path = $basePath.'/tmp/test_data/test2.yml';
 
         $storage = new YamlStorage($path);
         $storage->load();
@@ -81,8 +81,8 @@ class YamlStorageTest extends TestCase
         $storage = new YamlStorage();
         $this->assertEquals('', $storage->getDatadirBasePath());
 
-        $storage->setDatadirBasePath('test_data');
+        $storage->setDatadirBasePath('tmp/test_data');
 
-        $this->assertEquals('test_data', $storage->getDatadirBasePath());
+        $this->assertEquals('tmp/test_data', $storage->getDatadirBasePath());
     }
 }
