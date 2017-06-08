@@ -16,7 +16,7 @@ use TheFox\Utilities\Bin;
 class Hashcash
 {
     const NAME = 'Hashcash';
-    const VERSION = '1.7.0-dev.2';
+    const VERSION = '1.7.0-dev.3';
 
     const DATE_FORMAT = 'ymd';
     const DATE_FORMAT10 = 'ymdHi';
@@ -100,7 +100,7 @@ class Hashcash
     /**
      * @param integer $version
      */
-    public function setVersion($version)
+    public function setVersion(int $version)
     {
         if ($version <= 0) {
             throw new RuntimeException('Version 0 not implemented yet.', 1);
@@ -115,7 +115,7 @@ class Hashcash
     /**
      * @return integer
      */
-    public function getVersion()
+    public function getVersion(): int
     {
         return $this->version;
     }
@@ -123,7 +123,7 @@ class Hashcash
     /**
      * @param integer $bits
      */
-    public function setBits($bits)
+    public function setBits(int $bits)
     {
         $this->bits = $bits;
     }
@@ -131,7 +131,7 @@ class Hashcash
     /**
      * @return integer
      */
-    public function getBits()
+    public function getBits(): int
     {
         return $this->bits;
     }
@@ -139,7 +139,7 @@ class Hashcash
     /**
      * @param string $date
      */
-    public function setDate($date)
+    public function setDate(string $date)
     {
         $dateLen = strlen($date);
         if ($dateLen != 6 && $dateLen != 10 && $dateLen != 12) {
@@ -152,7 +152,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getDate()
+    public function getDate(): string
     {
         return $this->date;
     }
@@ -160,7 +160,7 @@ class Hashcash
     /**
      * @param string $resource
      */
-    public function setResource($resource)
+    public function setResource(string $resource)
     {
         $this->resource = $resource;
     }
@@ -168,7 +168,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->resource;
     }
@@ -176,7 +176,7 @@ class Hashcash
     /**
      * @param string $extension
      */
-    public function setExtension($extension)
+    public function setExtension(string $extension)
     {
         $this->extension = $extension;
     }
@@ -184,7 +184,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -192,7 +192,7 @@ class Hashcash
     /**
      * @param string $salt
      */
-    public function setSalt($salt)
+    public function setSalt(string $salt)
     {
         $this->salt = $salt;
     }
@@ -200,15 +200,15 @@ class Hashcash
     /**
      * @return string
      */
-    public function getSalt()
+    public function getSalt(): string
     {
         return $this->salt;
     }
 
     /**
-     * @param $suffix
+     * @param string $suffix
      */
-    public function setSuffix($suffix)
+    public function setSuffix(string $suffix)
     {
         $this->suffix = $suffix;
     }
@@ -216,7 +216,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getSuffix()
+    public function getSuffix(): string
     {
         return $this->suffix;
     }
@@ -224,7 +224,7 @@ class Hashcash
     /**
      * @param string $expiration
      */
-    public function setExpiration($expiration)
+    public function setExpiration(string $expiration)
     {
         $this->expiration = $expiration;
     }
@@ -232,7 +232,7 @@ class Hashcash
     /**
      * @return int
      */
-    public function getExpiration()
+    public function getExpiration(): int
     {
         return $this->expiration;
     }
@@ -240,7 +240,7 @@ class Hashcash
     /**
      * @param integer $attempts
      */
-    public function setAttempts($attempts)
+    public function setAttempts(int $attempts)
     {
         $this->attempts = $attempts;
     }
@@ -248,7 +248,7 @@ class Hashcash
     /**
      * @return int
      */
-    public function getAttempts()
+    public function getAttempts(): int
     {
         return $this->attempts;
     }
@@ -256,7 +256,7 @@ class Hashcash
     /**
      * @param string $hash
      */
-    public function setHash($hash)
+    public function setHash(string $hash)
     {
         $this->hash = $hash;
     }
@@ -264,7 +264,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
@@ -272,23 +272,23 @@ class Hashcash
     /**
      * @param integer $mintAttemptsMax
      */
-    public function setMintAttemptsMax($mintAttemptsMax)
+    public function setMintAttemptsMax(int $mintAttemptsMax)
     {
-        $this->mintAttemptsMax = (int)$mintAttemptsMax;
+        $this->mintAttemptsMax = $mintAttemptsMax;
     }
 
     /**
      * @return int
      */
-    public function getMintAttemptsMax()
+    public function getMintAttemptsMax(): int
     {
-        return (int)$this->mintAttemptsMax;
+        return $this->mintAttemptsMax;
     }
 
     /**
      * @param string $stamp
      */
-    public function setStamp($stamp)
+    public function setStamp(string $stamp)
     {
         $this->stamp = $stamp;
     }
@@ -296,7 +296,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function getStamp()
+    public function getStamp(): string
     {
         if (!$this->stamp) {
             $stamp = $this->getVersion() . ':' . $this->getBits();
@@ -312,7 +312,7 @@ class Hashcash
     /**
      * @return string
      */
-    public function mint()
+    public function mint(): string
     {
         //$stamp = '';
 
@@ -341,8 +341,7 @@ class Hashcash
             for ($round = 0; $round < $rounds; $round++) {
                 $testStamp = $attemptStamp . $round;
 
-                $found = $this->checkBitsFast(
-                    substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+                $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
 
                 if ($found) {
                     break;
@@ -377,14 +376,14 @@ class Hashcash
     /**
      * @return array
      */
-    public function mintAll()
+    public function mintAll(): array
     {
         $stamps = [];
 
         $bits = $this->getBits();
         $rounds = pow(2, $bits);
         $bytes = $bits / 8 + (8 - ($bits % 8)) / 8;
-        
+
         $salt = $this->getSalt();
         /*if (!$salt) {
             $salt = base64_encode(Rand::data(16));
@@ -393,7 +392,7 @@ class Hashcash
         $baseStamp = $this->getVersion() . ':' . $bits;
         $baseStamp .= ':' . $this->getDate();
         $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':' . $salt . ':';
-        
+
         for ($round = 0; $round < $rounds; $round++) {
             $testStamp = $baseStamp . $round;
             $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $bits);
@@ -409,7 +408,7 @@ class Hashcash
     /**
      * @param string $stamp
      */
-    public function parseStamp($stamp)
+    public function parseStamp(string $stamp)
     {
         if (!$stamp) {
             throw new InvalidArgumentException('Stamp "' . $stamp . '" is not valid.', 1);
@@ -433,7 +432,7 @@ class Hashcash
      * @param string|null $stamp
      * @return boolean
      */
-    public function verify($stamp = null)
+    public function verify(string $stamp = null): bool
     {
         if ($stamp === null) {
             $stamp = $this->getStamp();
@@ -477,10 +476,10 @@ class Hashcash
     }
 
     /**
-     * @param $data
+     * @param string $data
      * @return int
      */
-    private function checkBitsSlow($data)
+    private function checkBitsSlow(string $data): int
     {
         $bits = 0;
 
@@ -505,12 +504,12 @@ class Hashcash
     }
 
     /**
-     * @param $data
-     * @param $bytes
-     * @param $bits
+     * @param string $data
+     * @param int $bytes
+     * @param int $bits
      * @return bool
      */
-    private function checkBitsFast($data, $bytes, $bits)
+    private function checkBitsFast(string $data, int $bytes, int $bits): bool
     {
         $last = $bytes - 1;
 

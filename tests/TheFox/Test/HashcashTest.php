@@ -2,6 +2,8 @@
 
 namespace TheFox\Test;
 
+use RuntimeException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TheFox\Pow\Hashcash;
 
