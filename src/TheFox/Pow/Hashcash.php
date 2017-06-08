@@ -16,7 +16,7 @@ use TheFox\Utilities\Bin;
 class Hashcash
 {
     const NAME = 'Hashcash';
-    const VERSION = '1.7.0-dev.3';
+    const VERSION = '1.7.0-dev.4';
 
     const DATE_FORMAT = 'ymd';
     const DATE_FORMAT10 = 'ymdHi';
@@ -25,12 +25,12 @@ class Hashcash
     const MINT_ATTEMPTS_MAX = 10;
 
     /**
-     * @var integer
+     * @var int
      */
     private $version = 1;
 
     /**
-     * @var integer
+     * @var int
      */
     private $bits;
 
@@ -60,12 +60,12 @@ class Hashcash
     private $suffix = '';
 
     /**
-     * @var integer
+     * @var int
      */
     private $expiration = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     private $attempts = 0;
 
@@ -75,7 +75,7 @@ class Hashcash
     private $hash = '';
 
     /**
-     * @var integer
+     * @var int
      */
     private $mintAttemptsMax;
 
@@ -85,7 +85,7 @@ class Hashcash
     private $stamp = '';
 
     /**
-     * @param integer $bits
+     * @param int $bits
      * @param string $resource
      */
     public function __construct(int $bits = 20, string $resource = '')
@@ -98,7 +98,7 @@ class Hashcash
     }
 
     /**
-     * @param integer $version
+     * @param int $version
      */
     public function setVersion(int $version)
     {
@@ -113,7 +113,7 @@ class Hashcash
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getVersion(): int
     {
@@ -121,7 +121,7 @@ class Hashcash
     }
 
     /**
-     * @param integer $bits
+     * @param int $bits
      */
     public function setBits(int $bits)
     {
@@ -129,7 +129,7 @@ class Hashcash
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getBits(): int
     {
@@ -222,9 +222,9 @@ class Hashcash
     }
 
     /**
-     * @param string $expiration
+     * @param int $expiration
      */
-    public function setExpiration(string $expiration)
+    public function setExpiration(int $expiration)
     {
         $this->expiration = $expiration;
     }
@@ -238,7 +238,7 @@ class Hashcash
     }
 
     /**
-     * @param integer $attempts
+     * @param int $attempts
      */
     public function setAttempts(int $attempts)
     {
@@ -270,7 +270,7 @@ class Hashcash
     }
 
     /**
-     * @param integer $mintAttemptsMax
+     * @param int $mintAttemptsMax
      */
     public function setMintAttemptsMax(int $mintAttemptsMax)
     {
@@ -317,7 +317,7 @@ class Hashcash
         //$stamp = '';
 
         $rounds = pow(2, $this->getBits());
-        $bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
+        $bytes = (int)($this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8);
 
         $salt = $this->getSalt();
         if (!$salt) {
@@ -341,7 +341,9 @@ class Hashcash
             for ($round = 0; $round < $rounds; $round++) {
                 $testStamp = $attemptStamp . $round;
 
-                $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $this->getBits());
+                $hash = hash('sha1', $testStamp, true);
+                $data = substr($hash, 0, $bytes);
+                $found = $this->checkBitsFast($data, $bytes, $this->getBits());
 
                 if ($found) {
                     break;
@@ -355,7 +357,7 @@ class Hashcash
 
         if ($found) {
             $stamp = $testStamp;
-            $this->setSuffix($round);
+            $this->setSuffix((string)$round);
             $this->setSalt($salt);
             $this->setAttempts($attempt);
             $this->setHash(hash('sha1', $stamp));
@@ -382,7 +384,7 @@ class Hashcash
 
         $bits = $this->getBits();
         $rounds = pow(2, $bits);
-        $bytes = $bits / 8 + (8 - ($bits % 8)) / 8;
+        $bytes = (int)($bits / 8 + (8 - ($bits % 8)) / 8);
 
         $salt = $this->getSalt();
         /*if (!$salt) {
@@ -395,7 +397,9 @@ class Hashcash
 
         for ($round = 0; $round < $rounds; $round++) {
             $testStamp = $baseStamp . $round;
-            $found = $this->checkBitsFast(substr(hash('sha1', $testStamp, true), 0, $bytes), $bytes, $bits);
+            $hash = hash('sha1', $testStamp, true);
+            $data = substr($hash, 0, $bytes);
+            $found = $this->checkBitsFast($data, $bytes, $bits);
 
             if ($found) {
                 $stamps[] = $testStamp;
@@ -440,8 +444,10 @@ class Hashcash
             $this->parseStamp($stamp);
         }
 
-        $bytes = $this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8;
-        $verified = $this->checkBitsFast(substr(hash('sha1', $stamp, true), 0, $bytes), $bytes, $this->getBits());
+        $bytes = (int)($this->getBits() / 8 + (8 - ($this->getBits() % 8)) / 8);
+        $hash = hash('sha1', $stamp, true);
+        $data = substr($hash, 0, $bytes);
+        $verified = $this->checkBitsFast($data, $bytes, $this->getBits());
 
         if ($verified && $this->getExpiration()) {
             $dateLen = strlen($this->getDate());

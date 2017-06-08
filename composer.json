@@ -20,7 +20,8 @@
 	"require-dev": {
 		"doctrine/common": "^2.4",
 		"phpunit/phpunit": "^6.2",
-		"symfony/finder": "^2.5"
+		"symfony/finder": "^2.5",
+		"phpstan/phpstan": "^0.7"
 	},
 	"autoload": {
 		"psr-0": { "TheFox": "src" }

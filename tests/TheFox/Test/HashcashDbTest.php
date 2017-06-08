@@ -176,14 +176,14 @@ class HashcashDbTest extends TestCase
         $hashcash->setVersion(1);
         $hashcash->setBits(5);
         $hashcash->setResource('thefox');
-        $hashcash->setSuffix(1);
+        $hashcash->setSuffix('1');
         $this->assertTrue($db->addHashcash($hashcash));
 
         $hashcash = new Hashcash();
         $hashcash->setVersion(1);
         $hashcash->setBits(5);
         $hashcash->setResource('thefox');
-        $hashcash->setSuffix(2);
+        $hashcash->setSuffix('2');
         $this->assertTrue($db->addHashcash($hashcash));
 
         $this->assertEquals(2, count($db->getHashcashs()));
@@ -197,14 +197,14 @@ class HashcashDbTest extends TestCase
         $hashcash->setVersion(1);
         $hashcash->setBits(5);
         $hashcash->setResource('thefox');
-        $hashcash->setSuffix(1);
+        $hashcash->setSuffix('1');
         $this->assertTrue($db->addHashcash($hashcash));
 
         $hashcash = new Hashcash();
         $hashcash->setVersion(1);
         $hashcash->setBits(5);
         $hashcash->setResource('thefox');
-        $hashcash->setSuffix(1);
+        $hashcash->setSuffix('1');
         $this->assertFalse($db->addHashcash($hashcash));
 
         $this->assertEquals(1, count($db->getHashcashs()));

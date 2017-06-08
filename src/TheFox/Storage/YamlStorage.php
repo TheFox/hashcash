@@ -46,18 +46,21 @@ class YamlStorage
      */
     public function save(): bool
     {
-        $rv = false;
-
-        if ($this->dataChanged) {
-            if ($this->getFilePath()) {
-                $rv = file_put_contents($this->getFilePath(), Yaml::dump($this->data)) !== false;
-            }
-            if ($rv) {
-                $this->setDataChanged(false);
-            }
+        if (!$this->dataChanged) {
+            return false;
         }
 
-        return $rv;
+        if (!$this->getFilePath()) {
+            return false;
+        }
+
+        $writtenBytes = file_put_contents($this->getFilePath(), Yaml::dump($this->data));
+        if ($writtenBytes === false) {
+            return false;
+        }
+
+        $this->setDataChanged(false);
+        return true;
     }
 
     /**
@@ -65,30 +68,32 @@ class YamlStorage
      */
     public function load(): bool
     {
-        if ($this->getFilePath()) {
-            if (file_exists($this->getFilePath())) {
-                $this->data = Yaml::parse($this->getFilePath());
-
-                return $this->isLoaded(true);
-            }
+        if (!$this->getFilePath()) {
+            return false;
         }
 
-        return false;
+        if (!file_exists($this->getFilePath())) {
+            return false;
+        }
+        
+        $this->data = Yaml::parse($this->getFilePath());
+
+        return $this->isLoaded(true);
     }
 
     /**
      * Is Getter and Setter.
      *
-     * @param null $isLoaded
+     * @param bool $isLoaded
      * @return bool
      */
-    public function isLoaded($isLoaded = null): bool
+    public function isLoaded(bool $isLoaded = null): bool
     {
         if ($isLoaded !== null) {
             $this->isLoaded = $isLoaded;
         }
 
-        return (bool)$this->isLoaded;
+        return $this->isLoaded;
     }
 
     /**
