@@ -4,3 +4,4 @@ composer.phar
 !.travis.yml
 /.idea/
 /vendor/
+/tmp/
