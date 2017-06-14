@@ -1,36 +1,50 @@
 {
-	"name": "thefox/hashcash",
-	"description": "Hashcash implementation in PHP.",
-	"type": "library",
-	"keywords": [ "proof-of-work", "proofofwork", "hashcash", "hash", "cash", "sha1", "pow", "proof", "work" ],
-	"homepage": "https://fox21.at",
-	"license": "GPL-3.0",
-	"authors": [
-		{
-			"name": "Christian Mayer",
-			"email": "christian@fox21.at",
-			"homepage": "https://fox21.at"
-		}
-	],
-	"require": {
-		"php": "^7.0",
-		"thefox/utilities": "^1.1",
-		"thefox/storage": "^0.1"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^6.2",
-		"symfony/finder": "^3.3",
-		"phpstan/phpstan": "^0.7"
-	},
-	"autoload": {
-		"psr-0": { "TheFox": "src" }
-	},
-	"autoload-dev": {
-		"psr-0": { "TheFox": "tests" }
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.x.x-dev"
-		}
-	}
+    "name": "thefox/hashcash",
+    "description": "Hashcash implementation in PHP.",
+    "type": "library",
+    "keywords": [
+        "proof-of-work",
+        "proofofwork",
+        "hashcash",
+        "hash",
+        "cash",
+        "sha1",
+        "pow",
+        "proof",
+        "work"
+    ],
+    "homepage": "https://fox21.at",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Christian Mayer",
+            "email": "christian@fox21.at",
+            "homepage": "https://fox21.at"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "thefox/utilities": "^1.1",
+        "thefox/storage": "^0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "symfony/finder": "^3.3",
+        "phpstan/phpstan": "^0.7"
+    },
+    "autoload": {
+        "psr-0": {
+            "TheFox\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "TheFox\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x.x-dev"
+        }
+    }
 }
