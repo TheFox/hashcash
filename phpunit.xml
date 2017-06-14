@@ -22,7 +22,6 @@
 		<testsuite name="default">
 			<file>tests/TheFox/Test/HashcashDbTest.php</file>
 			<file>tests/TheFox/Test/HashcashTest.php</file>
-			<file>tests/TheFox/Test/YamlStorageTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
