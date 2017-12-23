@@ -54,23 +54,23 @@ class HashcashDb extends YamlStorage
      */
     public function load(): bool
     {
-        if (parent::load()) {
-            if (isset($this->data['hashcashs']) && $this->data['hashcashs']) {
-                foreach ($this->data['hashcashs'] as $hashcashId => $hashcashAr) {
-                    $this->hashcashsId = $hashcashId;
-
-                    $hashcash = new Hashcash();
-                    if ($hashcash->verify($hashcashAr['stamp'])) {
-                        $this->hashcashs[$hashcashId] = $hashcash;
-                    }
-                }
-            }
-            unset($this->data['hashcashs']);
-
-            return true;
+        if (!parent::load()) {
+            return false;
         }
 
-        return false;
+        if (isset($this->data['hashcashs']) && $this->data['hashcashs']) {
+            foreach ($this->data['hashcashs'] as $hashcashId => $hashcashAr) {
+                $this->hashcashsId = $hashcashId;
+
+                $hashcash = new Hashcash();
+                if ($hashcash->verify($hashcashAr['stamp'])) {
+                    $this->hashcashs[$hashcashId] = $hashcash;
+                }
+            }
+        }
+        unset($this->data['hashcashs']);
+
+        return true;
     }
 
     /**
@@ -88,15 +88,15 @@ class HashcashDb extends YamlStorage
      */
     public function addHashcash(Hashcash $hashcash): bool
     {
-        if (!$this->hasDoublespend($hashcash)) {
-            $this->hashcashsId++;
-            $this->hashcashs[$this->hashcashsId] = $hashcash;
-            $this->setDataChanged(true);
-
-            return true;
+        if ($this->hasDoublespend($hashcash)) {
+            return false;
         }
 
-        return false;
+        $this->hashcashsId++;
+        $this->hashcashs[$this->hashcashsId] = $hashcash;
+        $this->setDataChanged(true);
+
+        return true;
     }
 
     /**
