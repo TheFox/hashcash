@@ -100,6 +100,7 @@ class Hashcash
     /**
      * @param int $bits
      * @param string $resource
+     * @return Hashcash
      */
     public static function newInstance(int $bits = 20, string $resource = '') : Hashcash
     {
