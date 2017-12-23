@@ -33,12 +33,12 @@
         "phpstan/phpstan": "^0.7"
     },
     "autoload": {
-        "psr-0": {
-            "TheFox\\": "src"
+        "psr-4": {
+            "TheFox\\Pow\\": "src"
         }
     },
     "autoload-dev": {
-        "psr-0": {
+        "psr-4": {
             "TheFox\\": "tests"
         }
     },
