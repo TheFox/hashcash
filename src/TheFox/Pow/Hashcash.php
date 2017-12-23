@@ -98,6 +98,15 @@ class Hashcash
     }
 
     /**
+     * @param int $bits
+     * @param string $resource
+     */
+    public static function newInstance(int $bits = 20, string $resource = '') : Hashcash
+    {
+        return new Hashcash($bits, $resource);
+    }
+
+    /**
      * @param int $version
      * @return $this
      */
