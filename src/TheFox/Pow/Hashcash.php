@@ -99,8 +99,9 @@ class Hashcash
 
     /**
      * @param int $version
+     * @return $this
      */
-    public function setVersion(int $version)
+    public function setVersion(int $version) : Hashcash
     {
         if ($version <= 0) {
             throw new RuntimeException('Version 0 not implemented yet.', 1);
@@ -110,6 +111,8 @@ class Hashcash
         }
 
         $this->version = $version;
+
+        return $this;
     }
 
     /**
@@ -122,10 +125,13 @@ class Hashcash
 
     /**
      * @param int $bits
+     * @return $this
      */
-    public function setBits(int $bits)
+    public function setBits(int $bits) : Hashcash
     {
         $this->bits = $bits;
+
+        return $this;
     }
 
     /**
@@ -138,8 +144,9 @@ class Hashcash
 
     /**
      * @param string $date
+     * @return $this
      */
-    public function setDate(string $date)
+    public function setDate(string $date) : Hashcash
     {
         $dateLen = strlen($date);
         if ($dateLen != 6 && $dateLen != 10 && $dateLen != 12) {
@@ -147,6 +154,8 @@ class Hashcash
         }
 
         $this->date = $date;
+
+        return $this;
     }
 
     /**
@@ -159,10 +168,13 @@ class Hashcash
 
     /**
      * @param string $resource
+     * @return $this
      */
-    public function setResource(string $resource)
+    public function setResource(string $resource) : Hashcash
     {
         $this->resource = $resource;
+
+        return $this;
     }
 
     /**
@@ -175,10 +187,13 @@ class Hashcash
 
     /**
      * @param string $extension
+     * @return $this
      */
-    public function setExtension(string $extension)
+    public function setExtension(string $extension) : Hashcash
     {
         $this->extension = $extension;
+
+        return $this;
     }
 
     /**
@@ -191,10 +206,13 @@ class Hashcash
 
     /**
      * @param string $salt
+     * @return $this
      */
-    public function setSalt(string $salt)
+    public function setSalt(string $salt) : Hashcash
     {
         $this->salt = $salt;
+
+        return $this;
     }
 
     /**
@@ -207,10 +225,13 @@ class Hashcash
 
     /**
      * @param string $suffix
+     * @return $this
      */
-    public function setSuffix(string $suffix)
+    public function setSuffix(string $suffix) : Hashcash
     {
         $this->suffix = $suffix;
+
+        return $this;
     }
 
     /**
@@ -223,10 +244,13 @@ class Hashcash
 
     /**
      * @param int $expiration
+     * @return $this
      */
-    public function setExpiration(int $expiration)
+    public function setExpiration(int $expiration) : Hashcash
     {
         $this->expiration = $expiration;
+
+        return $this;
     }
 
     /**
@@ -239,10 +263,13 @@ class Hashcash
 
     /**
      * @param int $attempts
+     * @return $this
      */
-    public function setAttempts(int $attempts)
+    public function setAttempts(int $attempts) : Hashcash
     {
         $this->attempts = $attempts;
+
+        return $this;
     }
 
     /**
@@ -255,10 +282,13 @@ class Hashcash
 
     /**
      * @param string $hash
+     * @return $this
      */
-    public function setHash(string $hash)
+    public function setHash(string $hash) : Hashcash
     {
         $this->hash = $hash;
+
+        return $this;
     }
 
     /**
@@ -271,10 +301,13 @@ class Hashcash
 
     /**
      * @param int $mintAttemptsMax
+     * @return $this
      */
-    public function setMintAttemptsMax(int $mintAttemptsMax)
+    public function setMintAttemptsMax(int $mintAttemptsMax) : Hashcash
     {
         $this->mintAttemptsMax = $mintAttemptsMax;
+
+        return $this;
     }
 
     /**
@@ -287,10 +320,13 @@ class Hashcash
 
     /**
      * @param string $stamp
+     * @return $this
      */
-    public function setStamp(string $stamp)
+    public function setStamp(string $stamp) : Hashcash
     {
         $this->stamp = $stamp;
+
+        return $this;
     }
 
     /**
@@ -411,8 +447,9 @@ class Hashcash
 
     /**
      * @param string $stamp
+     * @return $this
      */
-    public function parseStamp(string $stamp)
+    public function parseStamp(string $stamp) : Hashcash
     {
         if (!$stamp) {
             throw new InvalidArgumentException('Stamp "' . $stamp . '" is not valid.', 1);
@@ -430,6 +467,8 @@ class Hashcash
         $this->setExtension($items[4]);
         $this->setSalt($items[5]);
         $this->setSuffix($items[6]);
+
+        return $this;
     }
 
     /**
