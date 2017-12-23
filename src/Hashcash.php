@@ -9,8 +9,8 @@ namespace TheFox\Pow;
 
 use DateTime;
 use RuntimeException;
-use InvalidArgumentException;
 use TheFox\Utilities\Rand;
+use InvalidArgumentException;
 
 class Hashcash
 {
@@ -93,6 +93,16 @@ class Hashcash
         $this->setResource($resource);
         $this->setExpiration(static::EXPIRATION);
         $this->setMintAttemptsMax(static::MINT_ATTEMPTS_MAX);
+    }
+
+    /**
+     * @param int $bits
+     * @param string $resource
+     * @return Hashcash
+     */
+    public static function newInstance(int $bits = 20, string $resource = '') : Hashcash
+    {
+        return new Hashcash($bits, $resource);
     }
 
     /**

@@ -16,6 +16,17 @@ See `examples.php` for more examples.
 <?php
 require 'vendor/autoload.php';
 use TheFox\Pow\Hashcash;
+$stamp = Hashcash::newInstance(20, 'example@example.com')->mint();
+print "hashcash stamp: '".$stamp."'\n";
+?>
+```
+
+### Alternative Usage
+
+```php
+<?php
+require 'vendor/autoload.php';
+use TheFox\Pow\Hashcash;
 $hashcash = new Hashcash(20, 'example@example.com');
 print "hashcash stamp: '".$hashcash->mint()."'\n";
 ?>
