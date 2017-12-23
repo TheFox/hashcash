@@ -103,3 +103,15 @@ try {
 } catch (Exception $e) {
     print 'ERROR 9: ' . $e->getMessage() . "\n";
 }
+
+// Example 7a: use short syntax
+$stamp = (new Hashcash(20, 'example@example.com'))
+    ->setDate(date(Hashcash::DATE_FORMAT12))
+    ->mint();
+
+// Example 7b: verify short syntax which is valid for 3 minutes
+try {
+    print "stamp7 verify: '" . ((new Hashcash())->setExpiration(60 * 3)->verify($stamp) ? 'Ok' : 'failed') . "'\n";
+} catch (Exception $e) {
+    print 'ERROR 10: ' . $e->getMessage() . "\n";
+}
