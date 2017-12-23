@@ -99,13 +99,12 @@ class Hashcash
      * @param int $version
      * @return $this
      */
-    public function setVersion(int $version) : Hashcash
+    public function setVersion(int $version): Hashcash
     {
         if ($version <= 0) {
             throw new RuntimeException('Version 0 not implemented yet.', 1);
         } elseif ($version > 1) {
-            throw new RuntimeException(
-                'Version ' . $version . ' not implemented yet.', 2);
+            throw new RuntimeException(sprintf('Version %d not implemented yet.', $version), 2);
         }
 
         $this->version = $version;
@@ -125,7 +124,7 @@ class Hashcash
      * @param int $bits
      * @return $this
      */
-    public function setBits(int $bits) : Hashcash
+    public function setBits(int $bits): Hashcash
     {
         $this->bits = $bits;
 
@@ -144,11 +143,11 @@ class Hashcash
      * @param string $date
      * @return $this
      */
-    public function setDate(string $date) : Hashcash
+    public function setDate(string $date): Hashcash
     {
         $dateLen = strlen($date);
         if ($dateLen != 6 && $dateLen != 10 && $dateLen != 12) {
-            throw new InvalidArgumentException('Date "' . $date . '" is not valid.', 1);
+            throw new InvalidArgumentException(sprintf('Date "%s" is not valid.', $date), 1);
         }
 
         $this->date = $date;
@@ -168,7 +167,7 @@ class Hashcash
      * @param string $resource
      * @return $this
      */
-    public function setResource(string $resource) : Hashcash
+    public function setResource(string $resource): Hashcash
     {
         $this->resource = $resource;
 
@@ -187,7 +186,7 @@ class Hashcash
      * @param string $extension
      * @return $this
      */
-    public function setExtension(string $extension) : Hashcash
+    public function setExtension(string $extension): Hashcash
     {
         $this->extension = $extension;
 
@@ -206,7 +205,7 @@ class Hashcash
      * @param string $salt
      * @return $this
      */
-    public function setSalt(string $salt) : Hashcash
+    public function setSalt(string $salt): Hashcash
     {
         $this->salt = $salt;
 
@@ -225,7 +224,7 @@ class Hashcash
      * @param string $suffix
      * @return $this
      */
-    public function setSuffix(string $suffix) : Hashcash
+    public function setSuffix(string $suffix): Hashcash
     {
         $this->suffix = $suffix;
 
@@ -244,7 +243,7 @@ class Hashcash
      * @param int $expiration
      * @return $this
      */
-    public function setExpiration(int $expiration) : Hashcash
+    public function setExpiration(int $expiration): Hashcash
     {
         $this->expiration = $expiration;
 
@@ -263,7 +262,7 @@ class Hashcash
      * @param int $attempts
      * @return $this
      */
-    public function setAttempts(int $attempts) : Hashcash
+    public function setAttempts(int $attempts): Hashcash
     {
         $this->attempts = $attempts;
 
@@ -282,7 +281,7 @@ class Hashcash
      * @param string $hash
      * @return $this
      */
-    public function setHash(string $hash) : Hashcash
+    public function setHash(string $hash): Hashcash
     {
         $this->hash = $hash;
 
@@ -301,7 +300,7 @@ class Hashcash
      * @param int $mintAttemptsMax
      * @return $this
      */
-    public function setMintAttemptsMax(int $mintAttemptsMax) : Hashcash
+    public function setMintAttemptsMax(int $mintAttemptsMax): Hashcash
     {
         $this->mintAttemptsMax = $mintAttemptsMax;
 
@@ -320,7 +319,7 @@ class Hashcash
      * @param string $stamp
      * @return $this
      */
-    public function setStamp(string $stamp) : Hashcash
+    public function setStamp(string $stamp): Hashcash
     {
         $this->stamp = $stamp;
 
@@ -333,13 +332,13 @@ class Hashcash
     public function getStamp(): string
     {
         if (!$this->stamp) {
-            $stamp = $this->getVersion() . ':' . $this->getBits();
-            $stamp .= ':' . $this->getDate();
-            $stamp .= ':' . $this->getResource() . ':' . $this->getExtension();
-            $stamp .= ':' . $this->getSalt() . ':' . $this->getSuffix();
-
-            $this->stamp = $stamp;
+            $this->stamp = sprintf('%s:%d:%s:%s:%s:%s:%s',
+                $this->getVersion(), $this->getBits(), $this->getDate(),
+                $this->getResource(), $this->getExtension(),
+                $this->getSalt(), $this->getSuffix()
+            );
         }
+
         return $this->stamp;
     }
 
@@ -358,9 +357,10 @@ class Hashcash
             $salt = base64_encode(Rand::data(16));
         }
 
-        $baseStamp = $this->getVersion() . ':' . $this->getBits();
-        $baseStamp .= ':' . $this->getDate();
-        $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':';
+        $baseStamp = sprintf('%s:%d:%s:%s:%s:',
+            $this->getVersion(), $this->getBits(), $this->getDate(),
+            $this->getResource(), $this->getExtension()
+        );
 
         $found = false;
         $round = 0;
@@ -396,12 +396,14 @@ class Hashcash
             $this->setAttempts($attempt);
             $this->setHash(hash('sha1', $stamp));
         } else {
-            $msg = 'Could not generate stamp after ' . $attempt . ' attempts, ';
-            $msg .= 'each with ' . $rounds . ' rounds. ';
-            $msg .= 'bits=' . $this->getBits() . ', ';
-            $msg .= 'date=' . $this->getDate() . ', ';
-            $msg .= 'resource=' . $this->getResource() . ', ';
-            $msg .= 'salts=' . join(',', $attemptSalts);
+            $tpl = 'Could not generate stamp after %d attempts,';
+            $tpl .= ' each with %d rounds.';
+            $tpl .= ' (bits=%d, date=%s, res=%s, salts=%s)';
+            $msg = sprintf($tpl,
+                $attempt, $rounds, $this->getBits(), $this->getDate(), $this->getResource(),
+                join(',', $attemptSalts)
+            );
+
             throw new RuntimeException($msg);
         }
 
@@ -421,13 +423,11 @@ class Hashcash
         $bytes = (int)($bits / 8 + (8 - ($bits % 8)) / 8);
 
         $salt = $this->getSalt();
-        /*if (!$salt) {
-            $salt = base64_encode(Rand::data(16));
-        }*/
 
-        $baseStamp = $this->getVersion() . ':' . $bits;
-        $baseStamp .= ':' . $this->getDate();
-        $baseStamp .= ':' . $this->getResource() . ':' . $this->getExtension() . ':' . $salt . ':';
+        $baseStamp = sprintf('%s:%d:%s:%s:%s:%s:',
+            $this->getVersion(), $bits, $this->getDate(),
+            $this->getResource(), $this->getExtension(), $salt
+        );
 
         for ($round = 0; $round < $rounds; $round++) {
             $testStamp = $baseStamp . $round;
@@ -447,15 +447,15 @@ class Hashcash
      * @param string $stamp
      * @return $this
      */
-    public function parseStamp(string $stamp) : Hashcash
+    public function parseStamp(string $stamp): Hashcash
     {
         if (!$stamp) {
-            throw new InvalidArgumentException('Stamp "' . $stamp . '" is not valid.', 1);
+            throw new InvalidArgumentException(sprintf('Invalid Stamp "%s"', $stamp), 1);
         }
 
         $items = preg_split('/:/', $stamp);
         if (count($items) < 7) {
-            throw new InvalidArgumentException('Stamp "' . $stamp . '" is not valid.', 2);
+            throw new InvalidArgumentException(sprintf('Invalid Stamp "%s"', $stamp), 2);
         }
 
         $this->setVersion($items[0]);
@@ -475,7 +475,7 @@ class Hashcash
      */
     public function verify(string $stamp = null): bool
     {
-        if ($stamp === null) {
+        if (null === $stamp) {
             $stamp = $this->getStamp();
         } else {
             $this->parseStamp($stamp);
@@ -498,16 +498,19 @@ class Hashcash
             switch ($dateLen) {
                 case 12:
                     $second = substr($this->getDate(), 10, 2);
+                // no break
                 case 10:
                     $hour = substr($this->getDate(), 6, 2);
                     $minute = substr($this->getDate(), 8, 2);
+                // no break
                 case 6:
                     $year = substr($this->getDate(), 0, 2);
                     $month = substr($this->getDate(), 2, 2);
                     $day = substr($this->getDate(), 4, 2);
+                // no break
             }
 
-            $date = new DateTime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
+            $date = new DateTime(sprintf('%s-%s-%s %s:%s:%s', $year, $month, $day, $hour, $minute, $second));
             $now = new DateTime('now');
 
             if ($date->getTimestamp() < $now->getTimestamp() - $this->getExpiration()) {
@@ -528,12 +531,7 @@ class Hashcash
     {
         $last = $bytes - 1;
 
-        if (substr($data, 0, $last) == str_repeat("\x00", $last) &&
-            ord(substr($data, -1)) >> ($bytes * 8 - $bits) == 0
-        ) {
-            return true;
-        }
-
-        return false;
+        return substr($data, 0, $last) == str_repeat("\x00", $last) &&
+            ord(substr($data, -1)) >> ($bytes * 8 - $bits) == 0;
     }
 }
