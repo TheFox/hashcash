@@ -11,16 +11,14 @@ class HashcashTest extends TestCase
 {
     public function testBasic()
     {
-        //$this->markTestIncomplete('This test has not been implemented yet.');
-
         $this->assertTrue(in_array('sha1', hash_algos()), 'sha1 algorithm not found.');
-        
+
         $time = mktime(10, 2, 0, 2, 26, 1987);
         $this->assertEquals('870226', date(Hashcash::DATE_FORMAT, $time));
-        
+
         $time = mktime(9, 59, 24, 2, 24, 1987);
         $this->assertEquals('8702240959', date(Hashcash::DATE_FORMAT10, $time));
-        
+
         $time = mktime(9, 58, 24, 2, 21, 1987);
         $this->assertEquals('870221095824', date(Hashcash::DATE_FORMAT12, $time));
     }
@@ -75,13 +73,11 @@ class HashcashTest extends TestCase
     public function testGetStamp()
     {
         $hashcash = new Hashcash();
-        $this->assertEquals('1:20:' . date(Hashcash::DATE_FORMAT) . '::::', $hashcash->getStamp());
+        $this->assertEquals(sprintf('1:20:%s::::', date(Hashcash::DATE_FORMAT)), $hashcash->getStamp());
     }
 
     public function testSetGet1()
     {
-        //$this->assertTrue(true); return;
-
         $hashcash = new Hashcash(5, 'test1');
         $this->assertEquals(5, $hashcash->getBits());
         $this->assertEquals('test1', $hashcash->getResource());
@@ -89,8 +85,6 @@ class HashcashTest extends TestCase
 
     public function testSetGet2()
     {
-        //$this->assertTrue(true); return;
-
         $hashcash = new Hashcash(5, 'test1');
         $this->assertEquals(1, $hashcash->getVersion());
         $this->assertEquals(5, $hashcash->getBits());
@@ -119,9 +113,6 @@ class HashcashTest extends TestCase
      */
     public function testMint1()
     {
-        //$this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertTrue(true); return;
-
         $hashcash = new Hashcash();
         $hashcash->setVersion(1);
         $hashcash->setBits(5);
@@ -207,9 +198,6 @@ class HashcashTest extends TestCase
 
     public function testVerify()
     {
-        //$this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertTrue(true); return;
-
         $hashcash = new Hashcash();
         $hashcash->setExpiration(0);
 
@@ -237,8 +225,6 @@ class HashcashTest extends TestCase
      */
     public function testVerifyInvalidArgumentException1()
     {
-        //$this->assertTrue(true);
-
         $hashcash = new Hashcash();
         $hashcash->verify('');
     }
@@ -249,8 +235,6 @@ class HashcashTest extends TestCase
      */
     public function testVerifyInvalidArgumentException2()
     {
-        //$this->assertTrue(true);
-
         $hashcash = new Hashcash();
         $hashcash->verify('1:20:140422:mint2:ext2:22060');
     }

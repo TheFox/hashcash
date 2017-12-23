@@ -1,7 +1,4 @@
-composer.lock
-composer.phar
-*.yml
-!.travis.yml
 /.idea/
 /vendor/
 /tmp/
+.env

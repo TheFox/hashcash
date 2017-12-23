@@ -20,3 +20,6 @@ else
     php composer.phar install --no-interaction
 fi
 
+if [[ !f .env ]]; then
+    cp .env.example .env
+fi
