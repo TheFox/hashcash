@@ -520,34 +520,6 @@ class Hashcash
 
     /**
      * @param string $data
-     * @return int
-     */
-    private function checkBitsSlow(string $data): int
-    {
-        $bits = 0;
-
-        $dataLen = strlen($data);
-        for ($charn = 0; $charn < $dataLen; $charn++) {
-            $char = ord($data[$charn]);
-
-            if ($char) {
-                for ($bit = 7; $bit >= 0; $bit--) {
-                    if ($char & (1 << $bit)) {
-                        break;
-                    }
-                    $bits++;
-                }
-                break;
-            } else {
-                $bits += 8;
-            }
-        }
-
-        return $bits;
-    }
-
-    /**
-     * @param string $data
      * @param int $bytes
      * @param int $bits
      * @return bool
