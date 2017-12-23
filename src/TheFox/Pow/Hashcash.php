@@ -9,8 +9,8 @@ namespace TheFox\Pow;
 
 use DateTime;
 use RuntimeException;
-use InvalidArgumentException;
 use TheFox\Utilities\Rand;
+use InvalidArgumentException;
 
 class Hashcash
 {
