@@ -36,7 +36,7 @@
 
 ## v1.5.2
 
-- [Travis](https://travis-ci.org/TheFox/hashcash) support added.
+- Travis support added.
 
 ## v1.5.1
 
