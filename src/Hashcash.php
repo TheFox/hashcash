@@ -15,7 +15,7 @@ use InvalidArgumentException;
 class Hashcash
 {
     const NAME = 'Hashcash';
-    const VERSION = '1.9.0-dev.2';
+    const VERSION = '1.9.0-dev.3';
     const DATE_FORMAT = 'ymd';
     const DATE_FORMAT10 = 'ymdHi';
     const DATE_FORMAT12 = 'ymdHis';

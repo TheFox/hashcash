@@ -1,5 +1,9 @@
 # Release Notes for Hashcash v1.x
 
+## v1.9.0 [unreleased]
+
+- MIT License
+
 ## v1.8.0
 
 - Use thefox/storage 0.1 for YAML.
